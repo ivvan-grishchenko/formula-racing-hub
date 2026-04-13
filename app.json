@@ -1,41 +1,34 @@
 {
   "expo": {
-    "name": "test",
-    "slug": "test",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "test",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
-    "experiments": {
+		"name": "formula-racing-hub",
+		"description": "A cross-platform app for exploring Formula-style racing—schedule, results, driver focus, and race-control highlights in a single hub.",
+		"slug": "formula-racing-hub",
+		"version": "1.0.0",
+		"platforms": ["ios", "android"],
+		"githubUrl": "https://github.com/ivvan-grishchenko/formula-racing-hub",
+		"orientation": "portrait",
+		"userInterfaceStyle": "automatic",
+		"icon": "./assets/images/icon.png",
+		"scheme": "formula-racing-hub",
+		"splash": {
+			"image": "./assets/images/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/images/adaptive-icon.png",
+				"backgroundColor": "#ffffff"
+			}
+		},
+		"plugins": ["expo-router", "expo-font"],
+		"experiments": {
 			"reactCompiler": true,
-      "typedRoutes": true
-    }
-  }
+			"typedRoutes": true
+		}
+	}
 }
