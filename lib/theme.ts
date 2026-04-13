@@ -57,7 +57,7 @@ export const THEME = {
     chart5: 'oklch(0.448 0.119 151.328)',
   },
 };
- 
+
 export const NAV_THEME: Record<'light' | 'dark', Theme> = {
   light: {
     ...DefaultTheme,

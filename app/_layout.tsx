@@ -14,26 +14,25 @@ import { useEffect } from 'react';
 void SplashScreen.preventAutoHideAsync();
 
 export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+	// Catch any errors thrown by the Layout component.
+	ErrorBoundary,
 } from 'expo-router';
 
 export default function RootLayout() {
-  const { colorScheme } = useColorScheme();
-  const [fontsLoaded, fontError] = useFonts(jetbrainsMonoFonts);
+	const { colorScheme } = useColorScheme();
+	const [fontsLoaded, fontError] = useFonts(jetbrainsMonoFonts);
 
-  useEffect(() => {
-    if (fontsLoaded || fontError) void SplashScreen.hideAsync();
-  }, [fontsLoaded, fontError]);
+	useEffect(() => {
+		if (fontsLoaded || fontError) void SplashScreen.hideAsync();
+	}, [fontsLoaded, fontError]);
 
-  if (!fontsLoaded && !fontError) return null;
+	if (!fontsLoaded && !fontError) return null;
 
-
-  return (
-    <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
-      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <Stack />
-      <PortalHost />
-    </ThemeProvider>
-  );
+	return (
+		<ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
+			<StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+			<Stack />
+			<PortalHost />
+		</ThemeProvider>
+	);
 }
