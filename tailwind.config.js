@@ -50,6 +50,10 @@ module.exports = {
       borderWidth: {
         hairline: hairlineWidth(),
       },
+      fontFamily: {
+        sans: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },

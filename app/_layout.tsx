@@ -1,11 +1,17 @@
-import '@/global.css';
+import '../global.css';
 
-import { NAV_THEME } from '@/lib/theme';
+import { jetbrainsMonoFonts } from '@lib/jetbrains-mono-fonts';
+import { NAV_THEME } from '@lib/theme';
 import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
+import { useEffect } from 'react';
+
+void SplashScreen.preventAutoHideAsync();
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -14,6 +20,14 @@ export {
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
+  const [fontsLoaded, fontError] = useFonts(jetbrainsMonoFonts);
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) void SplashScreen.hideAsync();
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) return null;
+
 
   return (
     <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
