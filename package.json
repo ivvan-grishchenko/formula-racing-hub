@@ -2,7 +2,6 @@
   "name": "formula-racing-hub",
   "main": "expo-router/entry",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "dev": "expo start -c",
     "android": "expo start -c --android",
@@ -10,7 +9,7 @@
     "web": "expo start -c --web",
     "clean": "rm -rf .expo node_modules",
     "lint": "expo lint",
-		"lint:fix": "expo lint --fix"
+    "lint:fix": "expo lint --fix"
   },
   "dependencies": {
     "@react-navigation/native": "^7.0.0",
@@ -49,6 +48,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-perfectionist": "^5.8.0",
     "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "~5.9.2"

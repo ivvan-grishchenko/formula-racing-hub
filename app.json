@@ -34,6 +34,7 @@
       "expo-font"
     ],
     "experiments": {
+			"reactCompiler": true,
       "typedRoutes": true
     }
   }
