@@ -1,34 +1,65 @@
 {
   "expo": {
-		"name": "formula-racing-hub",
-		"description": "A cross-platform app for exploring Formula-style racing—schedule, results, driver focus, and race-control highlights in a single hub.",
-		"slug": "formula-racing-hub",
-		"version": "1.0.0",
-		"platforms": ["ios", "android"],
-		"githubUrl": "https://github.com/ivvan-grishchenko/formula-racing-hub",
-		"orientation": "portrait",
-		"userInterfaceStyle": "automatic",
-		"icon": "./assets/images/icon.png",
-		"scheme": "formula-racing-hub",
-		"splash": {
-			"image": "./assets/images/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/images/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			}
-		},
-		"plugins": ["expo-router", "expo-font"],
-		"experiments": {
-			"reactCompiler": true,
-			"typedRoutes": true
-		}
-	}
+    "name": "formula-racing-hub",
+    "description": "A cross-platform app for exploring Formula-style racing—schedule, results, driver focus, and race-control highlights in a single hub.",
+    "slug": "formula-racing-hub",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "githubUrl": "https://github.com/ivvan-grishchenko/formula-racing-hub",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/icon.png",
+    "scheme": "formula-racing-hub",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-Bold.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-BoldItalic.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraBold.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraBoldItalic.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraLight.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraLightItalic.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-Italic.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-Light.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-LightItalic.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-Medium.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-MediumItalic.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-Regular.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-SemiBold.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-SemiBoldItalic.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-Thin.ttf",
+            "./assets/fonts/JetBrains Mono/JetBrainsMono-ThinItalic.ttf"
+          ]
+        }
+      ],
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "reactCompiler": true,
+      "typedRoutes": true
+    }
+  }
 }

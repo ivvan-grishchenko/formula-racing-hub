@@ -1,0 +1,37 @@
+---
+description: Before coding, run Planner subagent for a task plan; after changes, run Code Reviewer subagent
+alwaysApply: true
+---
+
+# Plan → implement → review workflow
+
+For **non-trivial** tasks (anything beyond a one-line typo or an obvious single edit already fully specified), follow this sequence. Do **not** jump straight to implementation.
+
+## 1. Plan first (Planner subagent)
+
+Before writing or editing application code:
+
+1. Launch the **Planner** subagent (`subagent_type: Planner`) with a clear description of the task: goals, constraints, and acceptance criteria.
+2. Wait for a **structured implementation plan** (goal, current state, ordered steps, testing strategy, risks, breaking changes, edge cases). See [`.cursor/agents/planner.md`](.cursor/agents/planner.md).
+3. **Implement only according to that plan.** If the plan is wrong or incomplete, refine via another Planner pass or explicit user guidance before large edits.
+
+Skip the Planner only when the change is **trivial and unambiguous** (e.g. fix a typo, rename one symbol everywhere, adjust a constant with no behavioral ripple).
+
+## 2. Implement
+
+Execute the planned steps, keep edits scoped to the task, and match existing project patterns.
+
+## 3. Review after (Code Reviewer subagent)
+
+After you believe the work is complete:
+
+1. Launch the **Code Reviewer** subagent (`subagent_type: Code Reviewer`) with context: what was requested, what changed, and where.
+2. Use its report to fix **critical** and **important** issues before considering the task done. See [`.cursor/agents/code-reviewer.md`](.cursor/agents/code-reviewer.md).
+
+## Examples
+
+| Situation | Planner | Code Reviewer |
+|-----------|---------|---------------|
+| New feature or multi-file change | Required | Required |
+| Bug fix touching logic or APIs | Required | Required |
+| One-word comment or typo in a single file | Skip | Skip |
