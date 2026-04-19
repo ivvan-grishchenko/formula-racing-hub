@@ -6,7 +6,7 @@ import { Bell, ChevronLeft } from 'lucide-react-native';
 import * as React from 'react';
 import { View } from 'react-native';
 
-export function MainHeader() {
+export function Header() {
 	const router = useRouter();
 
 	return (

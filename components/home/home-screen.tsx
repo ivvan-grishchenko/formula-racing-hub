@@ -1,9 +1,9 @@
+import { Loader } from '@components/layout/loader';
 import { useHomeData } from '@hooks/use-home-data';
 import { THEME } from '@lib/theme';
-import { Text } from '@ui/text';
 import { useColorScheme } from 'nativewind';
 import { useCallback } from 'react';
-import { ActivityIndicator, RefreshControl, ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 
 import DriverFocus from './driver-focus';
 import LatestResult from './latest-result';
@@ -27,14 +27,7 @@ export function HomeScreen() {
 		void refetch();
 	}, [refetch]);
 
-	if (isLoading) {
-		return (
-			<View className="flex-1 items-center justify-center">
-				<ActivityIndicator color={tint} />
-				<Text className="mt-3 text-sm">Loading…</Text>
-			</View>
-		);
-	}
+	if (isLoading) return <Loader />;
 
 	return (
 		<View className="flex-1">

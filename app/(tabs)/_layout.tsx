@@ -1,4 +1,4 @@
-import { MainHeader } from '@components/layout/main-header';
+import { Header } from '@components/layout/header';
 import { animatedTabSlotRender } from '@components/tabs/animated-tab-slot';
 import { Button } from '@ui/button';
 import { Icon } from '@ui/icon';
@@ -25,7 +25,7 @@ export default function TabsLayout() {
 		<SafeAreaView className="flex-1" edges={['top', 'bottom']}>
 			<Tabs>
 				<View className="flex-1">
-					<MainHeader />
+					<Header />
 					<View className="flex-1 pt-6">
 						<TabSlot detachInactiveScreens renderFn={animatedTabSlotRender} />
 					</View>
