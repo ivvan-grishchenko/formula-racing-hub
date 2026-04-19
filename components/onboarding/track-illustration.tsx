@@ -1,15 +1,13 @@
 import type { IllustrationProps } from '@components/onboarding/types';
 
-import { NAV_THEME } from '@lib/theme';
+import { Icon } from '@ui/icon';
 import { Text } from '@ui/text';
 import { ScanSearchIcon, TimerIcon, WindIcon } from 'lucide-react-native';
-import { useColorScheme } from 'nativewind';
 import * as React from 'react';
 import { View } from 'react-native';
 
 export function TrackIllustration({ data, width }: { data: IllustrationProps; width: number }) {
 	const s = width / 350;
-	const { colorScheme } = useColorScheme();
 
 	return (
 		<View className="relative h-[240px] w-full overflow-hidden bg-background">
@@ -66,10 +64,7 @@ export function TrackIllustration({ data, width }: { data: IllustrationProps; wi
 					top: 78 * s,
 					width: 44 * s,
 				}}>
-				<ScanSearchIcon
-					color={colorScheme === 'dark' ? NAV_THEME.dark.colors.text : NAV_THEME.light.colors.text}
-					size={24}
-				/>
+				<Icon as={ScanSearchIcon} color="text" size={24} />
 			</View>
 
 			<View
@@ -80,19 +75,14 @@ export function TrackIllustration({ data, width }: { data: IllustrationProps; wi
 					top: 12 * s,
 				}}>
 				<View className="flex-row items-center gap-1.5">
-					<TimerIcon
-						color={
-							colorScheme === 'dark'
-								? NAV_THEME.dark.colors.primary
-								: NAV_THEME.light.colors.primary
-						}
-						size={14}
-					/>
-					<Text className="text-[9px] font-bold uppercase text-muted-foreground">
+					<Icon as={TimerIcon} color="primary" size={14} />
+					<Text className="font-jetbrains-semi-bold text-[9px] uppercase text-muted-foreground">
 						{data.leftLabel}
 					</Text>
 				</View>
-				<Text className="mt-1 text-lg font-bold text-card-foreground">{data.leftValue}</Text>
+				<Text className="mt-1 font-jetbrains-bold text-lg text-card-foreground">
+					{data.leftValue}
+				</Text>
 			</View>
 
 			<View
@@ -103,19 +93,12 @@ export function TrackIllustration({ data, width }: { data: IllustrationProps; wi
 					width: 142 * s,
 				}}>
 				<View className="flex-row items-center gap-1.5">
-					<WindIcon
-						color={
-							colorScheme === 'dark'
-								? NAV_THEME.dark.colors.primary
-								: NAV_THEME.light.colors.primary
-						}
-						size={14}
-					/>
-					<Text className="text-[9px] font-bold uppercase text-muted-foreground">
+					<Icon as={WindIcon} color="primary" size={14} />
+					<Text className="font-jetbrains-semi-bold text-[9px] uppercase text-muted-foreground">
 						{data.rightLabel}
 					</Text>
 				</View>
-				<Text className="mt-1 text-lg font-bold text-primary">{data.rightValue}</Text>
+				<Text className="mt-1 font-jetbrains-bold text-lg text-primary">{data.rightValue}</Text>
 			</View>
 		</View>
 	);

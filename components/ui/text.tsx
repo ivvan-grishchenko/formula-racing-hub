@@ -4,43 +4,31 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import { Platform, Text as RNText, type Role } from 'react-native';
 
-const textVariants = cva(
-	cn(
-		'text-base text-foreground',
-		Platform.select({
-			web: 'select-text',
-		})
-	),
-	{
-		defaultVariants: {
-			variant: 'default',
+const textVariants = cva(cn('text-base text-foreground'), {
+	defaultVariants: {
+		variant: 'default',
+	},
+	variants: {
+		variant: {
+			blockquote: 'mt-4 border-l-2 pl-3 font-jetbrains-light italic sm:mt-6 sm:pl-6',
+			code: cn(
+				'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-jetbrains-semi-bold font-mono text-sm font-semibold'
+			),
+			default: 'font-jetbrains-regular',
+			h1: cn('text-center font-jetbrains-extra-bold text-4xl font-extrabold tracking-tight'),
+			h2: cn(
+				'border-b border-border pb-2 font-jetbrains-bold text-3xl font-semibold tracking-tight'
+			),
+			h3: cn('font-jetbrains-semi-bold text-2xl font-semibold tracking-tight'),
+			h4: cn('font-jetbrains-medium text-xl font-semibold tracking-tight'),
+			large: 'font-jetbrains-semi-bold text-lg font-semibold',
+			lead: 'font-jetbrains-medium text-xl text-muted-foreground',
+			muted: 'font-jetbrains-regular text-sm text-muted-foreground',
+			p: 'mt-3 font-jetbrains-medium leading-7 sm:mt-6',
+			small: 'font-jetbrains-light text-sm font-medium leading-none',
 		},
-		variants: {
-			variant: {
-				blockquote: 'mt-4 border-l-2 pl-3 italic sm:mt-6 sm:pl-6',
-				code: cn(
-					'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold'
-				),
-				default: '',
-				h1: cn(
-					'text-center text-4xl font-extrabold tracking-tight',
-					Platform.select({ web: 'scroll-m-20 text-balance' })
-				),
-				h2: cn(
-					'border-b border-border pb-2 text-3xl font-semibold tracking-tight',
-					Platform.select({ web: 'scroll-m-20 first:mt-0' })
-				),
-				h3: cn('text-2xl font-semibold tracking-tight', Platform.select({ web: 'scroll-m-20' })),
-				h4: cn('text-xl font-semibold tracking-tight', Platform.select({ web: 'scroll-m-20' })),
-				large: 'text-lg font-semibold',
-				lead: 'text-xl text-muted-foreground',
-				muted: 'text-sm text-muted-foreground',
-				p: 'mt-3 leading-7 sm:mt-6',
-				small: 'text-sm font-medium leading-none',
-			},
-		},
-	}
-);
+	},
+});
 
 type TextVariant = NonNullable<TextVariantProps['variant']>;
 
@@ -76,10 +64,11 @@ function Text({
 	}) {
 	const textClass = React.useContext(TextClassContext);
 	const Component = asChild ? Slot.Text : RNText;
+
 	return (
 		<Component
 			aria-level={variant ? ARIA_LEVEL[variant] : undefined}
-			className={cn(textVariants({ variant }), textClass, className)}
+			className={cn('font-jetbrains-regular', textVariants({ variant }), textClass, className)}
 			role={variant ? ROLE[variant] : undefined}
 			{...props}
 		/>

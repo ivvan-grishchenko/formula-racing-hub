@@ -4,6 +4,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
+			"@api/*": ["api/*"],
       "@components/*": ["components/*"],
       "@lib/*": ["lib/*"],
       "@ui/*": ["components/ui/*"],

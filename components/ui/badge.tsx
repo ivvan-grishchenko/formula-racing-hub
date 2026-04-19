@@ -56,6 +56,7 @@ type BadgeProps = React.ComponentProps<typeof View> &
 
 function Badge({ asChild, className, variant, ...props }: BadgeProps) {
 	const Component = asChild ? Slot.View : View;
+
 	return (
 		<TextClassContext.Provider value={badgeTextVariants({ variant })}>
 			<Component className={cn(badgeVariants({ variant }), className)} {...props} />

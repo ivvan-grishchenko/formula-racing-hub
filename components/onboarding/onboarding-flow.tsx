@@ -1,11 +1,10 @@
 import { Button } from '@components/ui/button';
 import { Text } from '@components/ui/text';
-import { NAV_THEME } from '@lib/theme';
 import { Badge } from '@ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/card';
+import { Icon } from '@ui/icon';
 import { BellRingIcon } from 'lucide-react-native';
-import { useColorScheme } from 'nativewind';
-import * as React from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
 	type LayoutChangeEvent,
 	Pressable,
@@ -22,28 +21,29 @@ import { TrackIllustration } from './track-illustration';
 
 function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 	const { height, width } = useWindowDimensions();
-	const scrollRef = React.useRef<ScrollView>(null);
-	const [index, setIndex] = React.useState(0);
-	const [illustrationWidth, setIllustrationWidth] = React.useState(width - 40);
-	const { colorScheme } = useColorScheme();
+	const scrollRef = useRef<ScrollView>(null);
+	const [index, setIndex] = useState(0);
+	const [illustrationWidth, setIllustrationWidth] = useState(width - 40);
 
-	const onIllustrationLayout = React.useCallback((e: LayoutChangeEvent) => {
+	const onIllustrationLayout = useCallback((e: LayoutChangeEvent) => {
 		setIllustrationWidth(e.nativeEvent.layout.width);
 	}, []);
 
-	const goToPage = React.useCallback(
+	const goToPage = useCallback(
 		(i: number) => {
 			const clamped = Math.max(0, Math.min(STEPS.length - 1, i));
+
 			scrollRef.current?.scrollTo({ animated: true, x: clamped * width });
 			setIndex(clamped);
 		},
 		[width]
 	);
 
-	const handleMomentumEnd = React.useCallback(
+	const handleMomentumEnd = useCallback(
 		(e: { nativeEvent: { contentOffset: { x: number } } }) => {
 			const x = e.nativeEvent.contentOffset.x;
 			const i = Math.round(x / width);
+
 			setIndex(Math.max(0, Math.min(STEPS.length - 1, i)));
 		},
 		[width]
@@ -64,7 +64,7 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 						<View className="flex-1 gap-4 px-5 pb-7 pt-4">
 							<View className="flex-row items-center justify-between">
 								<View className="min-h-[44px] flex-row items-center gap-3">
-									<Text className="text-[11px] font-bold uppercase text-foreground">
+									<Text className="font-jetbrains-bold text-[11px] text-foreground">
 										FORMULA RACING HUB
 									</Text>
 								</View>
@@ -79,7 +79,7 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 								</Badge>
 							</View>
 
-							<Text className="border-b-0 pb-0 italic" variant="h2">
+							<Text className="border-b-0 pb-0 font-jetbrains-italic" variant="h2">
 								{step.title}
 							</Text>
 
@@ -92,14 +92,8 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 							</View>
 
 							<Card>
-								<CardHeader className="flex-row content-center gap-2">
-									<BellRingIcon
-										color={
-											colorScheme === 'dark'
-												? NAV_THEME.dark.colors.notification
-												: NAV_THEME.light.colors.notification
-										}
-									/>
+								<CardHeader className="flex-row items-center gap-2">
+									<Icon as={BellRingIcon} color="notification" size={16} />
 									<CardTitle className="pt-1">{step.featureTitle}</CardTitle>
 								</CardHeader>
 								<CardContent>
@@ -133,7 +127,7 @@ function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 					className="w-full"
 					onPress={() => (index < STEPS.length - 1 ? goToPage(index + 1) : onComplete())}
 					size="lg">
-					<Text className="font-mono text-sm font-semibold text-primary-foreground">
+					<Text className="font-jetbrains-semi-bold text-sm text-primary-foreground">
 						{index < STEPS.length - 1 ? 'Continue' : 'Get started'}
 					</Text>
 				</Button>

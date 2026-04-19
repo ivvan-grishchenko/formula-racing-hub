@@ -1,54 +1,47 @@
 import type { LucideIcon, LucideProps } from 'lucide-react-native';
 
-import { cn } from '@lib/utils';
-import { cssInterop } from 'nativewind';
+import { NAV_THEME } from '@lib/theme';
+import { Theme } from '@react-navigation/native';
+import { useColorScheme } from 'nativewind';
+import { useMemo } from 'react';
+import { ColorValue } from 'react-native';
 
-type IconProps = LucideProps & {
+type IconProps = Omit<LucideProps, 'color'> & {
 	as: LucideIcon;
+	color?: ColorValue | ThemeColor | ThemeColorTuple;
 };
+type ThemeColor = keyof Theme['colors'];
+type ThemeColorTuple = [ThemeColor, ThemeColor];
 
-function IconImpl({ as: IconComponent, ...props }: IconProps) {
-	return <IconComponent {...props} />;
+function Icon({ as: IconComponent, color, size = 14, ...props }: IconProps) {
+	const { colorScheme } = useColorScheme();
+	const calculatedColor = useMemo(() => {
+		if (!color) return undefined;
+
+		if (isThemeColor(color))
+			return colorScheme === 'dark' ? NAV_THEME.dark.colors[color] : NAV_THEME.light.colors[color];
+
+		if (isThemeColorTuple(color))
+			return colorScheme === 'dark'
+				? NAV_THEME.dark.colors[color[0]]
+				: NAV_THEME.light.colors[color[1]];
+
+		return color;
+	}, [color, colorScheme]);
+
+	return <IconComponent color={calculatedColor} size={size} {...props} />;
 }
 
-cssInterop(IconImpl, {
-	className: {
-		nativeStyleToProp: {
-			height: 'size',
-			width: 'size',
-		},
-		target: 'style',
-	},
-});
+function isThemeColor(value: unknown): value is ThemeColor {
+	return typeof value === 'string' && Object.keys(NAV_THEME.dark.colors).includes(value);
+}
 
-/**
- * A wrapper component for Lucide icons with Nativewind `className` support via `cssInterop`.
- *
- * This component allows you to render any Lucide icon while applying utility classes
- * using `nativewind`. It avoids the need to wrap or configure each icon individually.
- *
- * @component
- * @example
- * ```tsx
- * import { ArrowRight } from 'lucide-react-native';
- * import { Icon } from '@/registry/components/ui/icon';
- *
- * <Icon as={ArrowRight} className="text-red-500" size={16} />
- * ```
- *
- * @param {LucideIcon} as - The Lucide icon component to render.
- * @param {string} className - Utility classes to style the icon using Nativewind.
- * @param {number} size - Icon size (defaults to 14).
- * @param {...LucideProps} ...props - Additional Lucide icon props passed to the "as" icon.
- */
-function Icon({ as: IconComponent, className, size = 14, ...props }: IconProps) {
+function isThemeColorTuple(value: unknown): value is ThemeColorTuple {
 	return (
-		<IconImpl
-			as={IconComponent}
-			className={cn('text-foreground', className)}
-			size={size}
-			{...props}
-		/>
+		Array.isArray(value) &&
+		value.length === 2 &&
+		typeof value[0] === 'string' &&
+		typeof value[1] === 'string'
 	);
 }
 

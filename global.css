@@ -64,8 +64,4 @@
     --font-sans: 'JetBrains Mono', ui-monospace, monospace;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   }
-
-  body {
-    @apply font-sans antialiased;
-  }
 }

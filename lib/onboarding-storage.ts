@@ -9,6 +9,7 @@ export async function clearOnboardingComplete(): Promise<void> {
 
 export async function getOnboardingComplete(): Promise<boolean> {
 	const v = await SecureStore.getItemAsync(KEY);
+
 	return v === '1';
 }
 

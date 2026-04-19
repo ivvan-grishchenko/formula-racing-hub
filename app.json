@@ -32,30 +32,9 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-Bold.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-BoldItalic.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraBold.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraBoldItalic.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraLight.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-ExtraLightItalic.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-Italic.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-Light.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-LightItalic.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-Medium.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-MediumItalic.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-Regular.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-SemiBold.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-SemiBoldItalic.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-Thin.ttf",
-            "./assets/fonts/JetBrains Mono/JetBrainsMono-ThinItalic.ttf"
-          ]
-        }
-      ],
-      "expo-secure-store"
+			"expo-font",
+      "expo-secure-store",
+			"expo-image"
     ],
     "experiments": {
       "reactCompiler": true,
