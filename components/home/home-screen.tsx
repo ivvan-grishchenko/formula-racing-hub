@@ -1,6 +1,7 @@
 import { Loader } from '@components/layout/loader';
 import { useHomeData } from '@hooks/use-home-data';
 import { THEME } from '@lib/theme';
+import { GLOW_OUTSET } from '@ui/glow';
 import { useColorScheme } from 'nativewind';
 import { useCallback } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
@@ -35,7 +36,7 @@ export function HomeScreen() {
 				<ScrollView
 					className="flex-1"
 					contentContainerClassName="gap-5 pb-28"
-					contentContainerStyle={{ paddingHorizontal: 16 }}
+					contentContainerStyle={{ paddingHorizontal: 16, paddingTop: GLOW_OUTSET }}
 					refreshControl={
 						<RefreshControl onRefresh={onRefresh} refreshing={isRefreshing} tintColor={tint} />
 					}

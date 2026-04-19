@@ -1,17 +1,40 @@
 import { cn } from '@lib/utils';
 import { Text, TextClassContext } from '@ui/text';
-import { View } from 'react-native';
+import { ComponentProps, useCallback, useState } from 'react';
+import { LayoutChangeEvent, View } from 'react-native';
 
-function Card({ className, ...props }: React.ComponentProps<typeof View>) {
+import { GlowOverlay } from './glow';
+
+type CardProps = ComponentProps<typeof View> & {
+	glow?: boolean;
+};
+
+function Card({ className, glow = false, onLayout, ...props }: CardProps) {
+	const [frame, setFrame] = useState({ h: 0, w: 0 });
+
+	const handleLayout = useCallback(
+		(event: LayoutChangeEvent) => {
+			onLayout?.(event);
+			const { height, width } = event.nativeEvent.layout;
+
+			setFrame({ h: height, w: width });
+		},
+		[onLayout]
+	);
+
 	return (
 		<TextClassContext.Provider value="text-card-foreground">
-			<View
-				className={cn(
-					'flex flex-col gap-6 rounded-xl border border-border bg-card py-6 shadow-sm shadow-black/5',
-					className
-				)}
-				{...props}
-			/>
+			<View className="relative overflow-visible">
+				{glow && frame.w > 0 && frame.h > 0 && <GlowOverlay height={frame.h} width={frame.w} />}
+				<View
+					className={cn(
+						'border-border/70 relative z-[1] flex flex-col gap-6 rounded-xl border bg-card py-6 shadow-sm shadow-black/5',
+						className
+					)}
+					onLayout={handleLayout}
+					{...props}
+				/>
+			</View>
 		</TextClassContext.Provider>
 	);
 }

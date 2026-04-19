@@ -3,14 +3,13 @@ import { Card, CardContent } from '@ui/card';
 import { Text } from '@ui/text';
 import { format, isSameMonth } from 'date-fns';
 import { Image } from 'expo-image';
-import * as React from 'react';
 import { View } from 'react-native';
 
 type NextRaceProps = { nextMeeting: OpenF1Meeting };
 
 export default function NextRace({ nextMeeting }: NextRaceProps) {
 	return (
-		<Card>
+		<Card glow>
 			<CardContent className="flex-row justify-between">
 				<View>
 					<View className="flex-row items-center gap-2">
