@@ -35,7 +35,7 @@ export function HomeScreen() {
 			<View className="flex-1">
 				<ScrollView
 					className="flex-1"
-					contentContainerClassName="gap-5 pb-28"
+					contentContainerClassName="gap-4 pb-10"
 					contentContainerStyle={{ paddingHorizontal: 16, paddingTop: GLOW_OUTSET }}
 					refreshControl={
 						<RefreshControl onRefresh={onRefresh} refreshing={isRefreshing} tintColor={tint} />

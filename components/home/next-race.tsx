@@ -7,6 +7,16 @@ import { View } from 'react-native';
 
 type NextRaceProps = { nextMeeting: OpenF1Meeting };
 
+export function formatNextRaceDates(startIso: string, endIso: string): string {
+	const start = new Date(startIso);
+	const end = new Date(endIso);
+	const sameMonth = isSameMonth(end, start);
+
+	if (sameMonth) return `${format(start, 'dd')}-${format(end, 'dd LLLL')}`;
+
+	return `${format(start, 'dd LLLL')}-${format(end, 'dd LLLL')}`;
+}
+
 export default function NextRace({ nextMeeting }: NextRaceProps) {
 	return (
 		<Card glow>
@@ -33,14 +43,4 @@ export default function NextRace({ nextMeeting }: NextRaceProps) {
 			</CardContent>
 		</Card>
 	);
-}
-
-function formatNextRaceDates(startIso: string, endIso: string): string {
-	const start = new Date(startIso);
-	const end = new Date(endIso);
-	const sameMonth = isSameMonth(end, start);
-
-	if (sameMonth) return `${format(start, 'dd')}-${format(end, 'dd LLLL')}`;
-
-	return `${format(start, 'dd LLLL')}-${format(end, 'dd LLLL')}`;
 }

@@ -24,6 +24,7 @@ export type OpenF1Meeting = {
 	date_end: string;
 	date_start: string;
 	gmt_offset: string;
+	is_cancelled: boolean;
 	location: string;
 	meeting_key: number;
 	meeting_name: string;

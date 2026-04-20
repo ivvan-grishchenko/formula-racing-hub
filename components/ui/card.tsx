@@ -5,7 +5,7 @@ import { LayoutChangeEvent, View } from 'react-native';
 
 import { GlowOverlay } from './glow';
 
-type CardProps = ComponentProps<typeof View> & {
+export type CardProps = ComponentProps<typeof View> & {
 	glow?: boolean;
 };
 

@@ -28,8 +28,6 @@ type HomeData = {
 	refetch: () => Promise<void>;
 };
 
-const IGNORE_COUNTRY_NAMES = ['Bahrain', 'Saudi Arabia'];
-
 /**
  * OpenF1 data for the home screen: next meeting, latest completed race, podium, drivers, grid, race control feed.
  */
@@ -38,14 +36,13 @@ export function useHomeData(): HomeData {
 
 	const nextRaceQueryObj: QueryWrapper<OpenF1Meeting> = {
 		'date_start>': format(Date.now(), 'yyyy-MM-dd'),
+		is_cancelled: false,
 		year,
 	};
 	const nextRaceQuery = useQuery({
 		queryFn: () => fetchMeetings(nextRaceQueryObj),
 		queryKey: openf1Keys.meetings(nextRaceQueryObj),
-		select: (meetings) =>
-			meetings.filter((meeting) => !IGNORE_COUNTRY_NAMES.includes(meeting.country_name)).at(0) ||
-			null,
+		select: (meetings) => meetings.at(0) || null,
 	});
 	const { data: nextRace, refetch: refetchNextRace } = nextRaceQuery;
 

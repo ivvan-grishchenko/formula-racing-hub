@@ -1,10 +1,5 @@
-import { Text } from '@components/ui/text';
-import { View } from 'react-native';
+import { CalendarScreen } from '@components/calendar/calendar-screen';
 
 export default function CalendarTab() {
-	return (
-		<View className="flex-1 items-center justify-center px-6">
-			<Text className="font-mono text-sm">Calendar — coming soon</Text>
-		</View>
-	);
+	return <CalendarScreen />;
 }
