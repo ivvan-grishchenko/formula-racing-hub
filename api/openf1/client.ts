@@ -3,6 +3,8 @@ import { SlidingWindowThrottle } from '@lib/rate-limit';
 import { stringify } from 'qs';
 
 import type {
+	OpenF1ChampionshipDriver,
+	OpenF1ChampionshipTeam,
 	OpenF1Driver,
 	OpenF1Meeting,
 	OpenF1RaceControl,
@@ -65,6 +67,34 @@ export function fetchSessions(queryRaw: QueryWrapper<OpenF1Session>): Promise<Op
 		const query = stringify(queryRaw, { encode: false });
 
 		return openF1Throttle.run(() => baseFetch<OpenF1Session[]>(BASE, `/sessions?${query}`));
+	} catch {
+		return Promise.resolve([]);
+	}
+}
+
+export function fetchChampionshipDrivers(
+	queryRaw: QueryWrapper<OpenF1ChampionshipDriver>
+): Promise<OpenF1ChampionshipDriver[]> {
+	try {
+		const query = stringify(queryRaw, { encode: false });
+
+		return openF1Throttle.run(() =>
+			baseFetch<OpenF1ChampionshipDriver[]>(BASE, `/championship_drivers?${query}`)
+		);
+	} catch {
+		return Promise.resolve([]);
+	}
+}
+
+export function fetchChampionshipTeams(
+	queryRaw: QueryWrapper<OpenF1ChampionshipTeam>
+): Promise<OpenF1ChampionshipTeam[]> {
+	try {
+		const query = stringify(queryRaw, { encode: false });
+
+		return openF1Throttle.run(() =>
+			baseFetch<OpenF1ChampionshipTeam[]>(BASE, `/championship_teams?${query}`)
+		);
 	} catch {
 		return Promise.resolve([]);
 	}

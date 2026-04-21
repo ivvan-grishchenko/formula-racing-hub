@@ -9,15 +9,17 @@ import {
 	SelectValue,
 } from '@ui/select';
 import { useMemo, useRef } from 'react';
-import { Platform, ScrollView } from 'react-native';
+import { Platform } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type YearSelectorProps = {
+	className?: string;
 	onSelectedYearChange: (year: number) => void;
 	selectedYear: number;
 };
 
-export function YearSelector({ onSelectedYearChange, selectedYear }: YearSelectorProps) {
+export function YearSelector({ className, onSelectedYearChange, selectedYear }: YearSelectorProps) {
 	const ref = useRef<TriggerRef>(null);
 	const seasons = useMemo(() => {
 		const currentYear = new Date().getFullYear();
@@ -42,10 +44,10 @@ export function YearSelector({ onSelectedYearChange, selectedYear }: YearSelecto
 		<Select
 			onValueChange={(option) => onSelectedYearChange(Number(option?.value || selectedYear))}
 			value={{ label: `${selectedYear} season`.toUpperCase(), value: `${selectedYear}` }}>
-			<SelectTrigger className="w-[180px]" ref={ref}>
+			<SelectTrigger className={cn('w-[180px]', className)} ref={ref}>
 				<SelectValue className="font-jetbrains-thin-italic" placeholder="Select a season" />
 			</SelectTrigger>
-			<SelectContent className="w-[180px]" insets={contentInsets}>
+			<SelectContent className={cn('w-[180px]', className)} insets={contentInsets}>
 				<NativeSelectScrollView>
 					<SelectGroup>
 						{seasons.map((season) => (

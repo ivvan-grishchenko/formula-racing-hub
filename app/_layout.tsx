@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
 import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 void SplashScreen.preventAutoHideAsync();
 
@@ -55,12 +56,14 @@ export default function RootLayout() {
 	if (!loaded && !error) return null;
 
 	return (
-		<QueryClientProvider client={queryClient}>
-			<ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
-				<StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-				<Stack screenOptions={{ headerShown: false }} />
-				<PortalHost />
-			</ThemeProvider>
-		</QueryClientProvider>
+		<GestureHandlerRootView>
+			<QueryClientProvider client={queryClient}>
+				<ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
+					<StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+					<Stack screenOptions={{ headerShown: false }} />
+					<PortalHost />
+				</ThemeProvider>
+			</QueryClientProvider>
+		</GestureHandlerRootView>
 	);
 }

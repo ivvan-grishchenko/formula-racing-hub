@@ -1,5 +1,27 @@
 /** OpenF1 API response shapes — see https://openf1.org/docs/ */
 
+/** Drivers championship — beta; race sessions only. */
+export type OpenF1ChampionshipDriver = {
+	driver_number: number;
+	meeting_key: number;
+	points_current: null | number;
+	points_start: null | number;
+	position_current: number;
+	position_start: number;
+	session_key: number;
+};
+
+/** Teams championship — beta; race sessions only. */
+export type OpenF1ChampionshipTeam = {
+	meeting_key: number;
+	points_current: null | number;
+	points_start: null | number;
+	position_current: number;
+	position_start: number;
+	session_key: number;
+	team_name: string;
+};
+
 export type OpenF1Driver = {
 	broadcast_name: string;
 	driver_number: number;

@@ -1,5 +1,7 @@
 /** Centralized TanStack Query keys for OpenF1. */
 import type {
+	OpenF1ChampionshipDriver,
+	OpenF1ChampionshipTeam,
 	OpenF1Driver,
 	OpenF1Meeting,
 	OpenF1RaceControl,
@@ -9,6 +11,10 @@ import type {
 } from '@api/openf1/types';
 
 export const openf1Keys = {
+	championshipDrivers: (query: QueryWrapper<OpenF1ChampionshipDriver>) =>
+		['championshipDrivers', ...Object.values(query)] as const,
+	championshipTeams: (query: QueryWrapper<OpenF1ChampionshipTeam>) =>
+		['championshipTeams', ...Object.values(query)] as const,
 	drivers: (query: QueryWrapper<OpenF1Driver>) => ['drivers', ...Object.values(query)] as const,
 	meetings: (query: QueryWrapper<OpenF1Meeting>) => ['meetings', ...Object.values(query)] as const,
 	raceControl: (query: QueryWrapper<OpenF1RaceControl>) =>
