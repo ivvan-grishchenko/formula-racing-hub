@@ -11,34 +11,54 @@
     "githubUrl": "https://github.com/ivvan-grishchenko/formula-racing-hub",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "icon": "./assets/images/icon.png",
     "scheme": "formula-racing-hub",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": {
+        "dark": "./assets/images/ios-dark.png",
+        "light": "./assets/images/ios-light.png",
+        "tinted": "./assets/images/ios-tinted.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
+        "monochromeImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ivangrishchenko.formularacinghub"
     },
     "plugins": [
       "expo-router",
-			"expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon-dark.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "image": "./assets/images/splash-icon-light.png",
+            "backgroundColor": "#090b0c"
+          }
+        }
+      ],
+      "expo-font",
       "expo-secure-store",
-			"expo-image"
+      "expo-image"
     ],
     "experiments": {
       "reactCompiler": true,
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "11334445-6fe5-4b24-8af8-1a8f0e7505b1"
+      }
     }
   }
 }
