@@ -5,6 +5,7 @@
 - TypeScript strict mode enabled.
 - Use path aliases consistently: `@components/*`, `@lib/*`, `@ui/*`, `@hooks/*`.
 - Named exports preferred over `export default` (e.g., `export function`, `export type`).
+- Use direct imports like `import { useEffect } from 'react'` instead of `import * as React from 'react'` where possible.
 - Use `cn()` (tailwind-merge) for classnames.
 - Prefer destructuring with defaults for props; keep prop order: event handlers last.
 
