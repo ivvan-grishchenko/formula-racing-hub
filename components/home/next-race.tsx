@@ -1,8 +1,9 @@
 import { OpenF1Meeting } from '@api/openf1/types';
 import { Card, CardContent } from '@ui/card';
 import { Text } from '@ui/text';
-import { format, isSameMonth } from 'date-fns';
+import { format, isSameMonth, isWithinInterval, parseISO } from 'date-fns';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { View } from 'react-native';
 
 type NextRaceProps = { nextMeeting: OpenF1Meeting };
@@ -18,8 +19,19 @@ export function formatNextRaceDates(startIso: string, endIso: string): string {
 }
 
 export default function NextRace({ nextMeeting }: NextRaceProps) {
+	const router = useRouter();
+	const meetingKey = String(nextMeeting.meeting_key);
+
+	const handleOnPress = () =>
+		router.push({ params: { meetingKey }, pathname: '/(info)/weekend/[meetingKey]' });
+
+	const isGlowing = isWithinInterval(new Date(), {
+		end: parseISO(nextMeeting.date_end),
+		start: parseISO(nextMeeting.date_start),
+	});
+
 	return (
-		<Card glow>
+		<Card glow={isGlowing} onPress={handleOnPress}>
 			<CardContent className="flex-row justify-between">
 				<View>
 					<View className="flex-row items-center gap-2">

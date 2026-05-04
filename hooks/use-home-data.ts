@@ -35,7 +35,7 @@ export function useHomeData(): HomeData {
 	const year = useMemo(() => new Date().getFullYear(), []);
 
 	const nextRaceQueryObj: QueryWrapper<OpenF1Meeting> = {
-		'date_start>': format(Date.now(), 'yyyy-MM-dd'),
+		'date_end>': format(Date.now(), 'yyyy-MM-dd'),
 		is_cancelled: false,
 		year,
 	};
@@ -100,7 +100,7 @@ export function useHomeData(): HomeData {
 	});
 
 	const driversData = driversQuery.map((driverQuery) => driverQuery.data);
-	const driversPending = driversQuery.some((q) => q.isPending);
+	const driversPending = driversQuery.some((q) => q.isLoading);
 	const driversRefetching = driversQuery.some((q) => q.isRefetching);
 	const driverQueryError = driversQuery.find((q) => q.error)?.error ?? null;
 	const driversRefetch = driversQuery.map((driverQuery) => driverQuery.refetch);
@@ -109,24 +109,19 @@ export function useHomeData(): HomeData {
 		enabled: !!latestRaceMeeting?.meeting_name,
 		queryFn: () => fetchDriverOfTheDay(year, latestRaceMeeting?.meeting_name || ''),
 		queryKey: tracingInsightsKeys.driverOfTheDay(year, latestRaceMeeting?.meeting_name || ''),
-		select: (data) => data.winner,
+		select: (data) => data?.winner || null,
 	});
 	const { data: driverOfTheDayFullName, refetch: refetchDriverOfTheDayFullName } =
 		driverOfTheDayFullNameQuery;
-
-	const fetchedDriverOfTheDay = driversData.find((driver) => {
-		const [firstName, lastName] = driverOfTheDayFullName?.split(' ') || [];
-
-		return driver?.first_name === firstName && driver?.last_name === lastName;
-	});
 
 	const driverOfTheDayQueryObj: QueryWrapper<OpenF1Driver> = {
 		first_name: driverOfTheDayFullName?.split(' ').at(0),
 		last_name: driverOfTheDayFullName?.split(' ').at(1),
 		session_key: latestRace?.session_key,
 	};
+
 	const driverOfTheDayQuery = useQuery({
-		enabled: !fetchedDriverOfTheDay,
+		enabled: !!driverOfTheDayFullName,
 		queryFn: () => fetchDriver(driverOfTheDayQueryObj),
 		queryKey: openf1Keys.drivers(driverOfTheDayQueryObj),
 		select: (driver) => driver.at(0) || null,
@@ -156,13 +151,13 @@ export function useHomeData(): HomeData {
 	}, [driversData, driversQuery.length, latestRaceResult]);
 
 	const isLoading =
-		nextRaceQuery.isPending ||
-		latestRaceQuery.isPending ||
-		latestRaceMeetingQuery.isPending ||
-		latestRaceResultQuery.isPending ||
+		nextRaceQuery.isLoading ||
+		latestRaceQuery.isLoading ||
+		latestRaceMeetingQuery.isLoading ||
+		latestRaceResultQuery.isLoading ||
 		driversPending ||
-		driverOfTheDayFullNameQuery.isPending ||
-		driverOfTheDayQuery.isPending;
+		driverOfTheDayFullNameQuery.isLoading ||
+		driverOfTheDayQuery.isLoading;
 
 	const isRefreshing =
 		nextRaceQuery.isRefetching ||
@@ -204,7 +199,7 @@ export function useHomeData(): HomeData {
 	]);
 
 	return {
-		driverOfTheDay: fetchedDriverOfTheDay || driverOfTheDay,
+		driverOfTheDay,
 		error,
 		isLoading,
 		isRefreshing,

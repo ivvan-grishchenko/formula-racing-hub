@@ -1,3 +1,4 @@
+import { ErrorDisplay } from '@components/layout/error-display';
 import { Loader } from '@components/layout/loader';
 import { useHomeData } from '@hooks/use-home-data';
 import { THEME } from '@lib/theme';
@@ -16,6 +17,7 @@ export function HomeScreen() {
 
 	const {
 		driverOfTheDay,
+		error,
 		isLoading,
 		isRefreshing,
 		latestRace,
@@ -24,11 +26,11 @@ export function HomeScreen() {
 		refetch,
 	} = useHomeData();
 
-	const onRefresh = useCallback(() => {
-		void refetch();
-	}, [refetch]);
+	const onRefresh = useCallback(() => void refetch(), [refetch]);
 
 	if (isLoading) return <Loader />;
+
+	if (error) return <ErrorDisplay message={error.message} onRetry={refetch} />;
 
 	return (
 		<View className="flex-1">
@@ -47,7 +49,7 @@ export function HomeScreen() {
 						<LatestResult latestRace={latestRace} latestRaceResult={latestRaceResult} />
 					)}
 
-					{driverOfTheDay && <DriverFocus driverOfTheDay={driverOfTheDay} />}
+					<DriverFocus driverOfTheDay={driverOfTheDay} />
 				</ScrollView>
 			</View>
 		</View>

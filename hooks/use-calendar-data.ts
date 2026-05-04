@@ -76,7 +76,7 @@ export function useCalendarData({ year }: CalendarDataProps): CalendarData {
 		);
 	}, [meetingsData, sprintMeetingKeys]);
 
-	const isLoading = meetingsQuery.isPending || sessionsQuery.isPending;
+	const isLoading = meetingsQuery.isLoading || sessionsQuery.isLoading;
 
 	const isRefreshing = meetingsQuery.isRefetching || sessionsQuery.isRefetching;
 

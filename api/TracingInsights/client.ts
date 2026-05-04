@@ -1,20 +1,22 @@
-import { baseFetch } from '@lib/http';
+import { ApiError, createApiClient, toApiError } from '@lib/http';
 
 import type { DriverOfTheDay } from './types';
 
-const BASE = 'https://raw.githubusercontent.com/TracingInsights/DOTD/refs/heads/main';
+const BASE = 'https://raw.githubusercontent.com/TracingInsights/DOTD/refs/heads/main/';
+const tracingInsightsApiClient = createApiClient({
+	baseUrl: BASE,
+});
 
-export function fetchDriverOfTheDay(year: number, race: string): Promise<DriverOfTheDay> {
+export async function fetchDriverOfTheDay(
+	year: number,
+	race: string
+): Promise<DriverOfTheDay | null> {
 	try {
-		const url = `${year}/${race}/dotd.json`;
+		const path = `${year}/${race}/dotd.json`;
 
-		return baseFetch<DriverOfTheDay>(BASE, url);
-	} catch {
-		return Promise.resolve({
-			race_name: 'Japanese Grand Prix',
-			voting_results: [],
-			winner: 'Oscar Piastri',
-			year: 2026,
-		});
+		return await tracingInsightsApiClient.get<DriverOfTheDay>(path);
+	} catch (error) {
+		if (error instanceof ApiError && error.status === 404) return null;
+		throw toApiError(error);
 	}
 }

@@ -111,9 +111,9 @@ export function useStandingsData({ session_key }: UseStandingsDataProps): Standi
 		driversQuery.error ?? championshipDriversQuery.error ?? championshipTeamsQuery.error ?? null;
 
 	const isLoading =
-		driversQuery.isPending ||
-		championshipDriversQuery.isPending ||
-		championshipTeamsQuery.isPending;
+		driversQuery.isLoading ||
+		championshipDriversQuery.isLoading ||
+		championshipTeamsQuery.isLoading;
 
 	const isRefreshing =
 		driversQuery.isRefetching ||

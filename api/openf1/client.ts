@@ -1,6 +1,5 @@
-import { baseFetch } from '@lib/http';
+import { ApiError, createApiClient, toApiError } from '@lib/http';
 import { SlidingWindowThrottle } from '@lib/rate-limit';
-import { stringify } from 'qs';
 
 import type {
 	OpenF1ChampionshipDriver,
@@ -13,89 +12,111 @@ import type {
 	QueryWrapper,
 } from './types';
 
-const BASE = 'https://api.openf1.org/v1';
+const BASE = 'https://api.openf1.org/v1/';
 const openF1Throttle = new SlidingWindowThrottle(3, 1000);
+const openF1ApiClient = createApiClient({
+	baseUrl: BASE,
+	defaultHeaders: { Accept: 'application/json' },
+	timeoutMs: 8_000,
+});
 
-export function fetchDriver(queryRaw: QueryWrapper<OpenF1Driver>): Promise<OpenF1Driver[]> {
-	try {
-		const query = stringify(queryRaw, { encode: false });
-
-		return openF1Throttle.run(() => baseFetch<OpenF1Driver[]>(BASE, `/drivers?${query}`));
-	} catch {
-		return Promise.resolve([]);
-	}
-}
-
-export function fetchMeetings(queryRaw: QueryWrapper<OpenF1Meeting>): Promise<OpenF1Meeting[]> {
-	try {
-		const query = stringify(queryRaw, { encode: false });
-
-		return openF1Throttle.run(() => baseFetch<OpenF1Meeting[]>(BASE, `/meetings?${query}`));
-	} catch {
-		return Promise.resolve([]);
-	}
-}
-
-export function fetchRaceControl(
-	queryRaw: QueryWrapper<OpenF1RaceControl>
-): Promise<OpenF1RaceControl[]> {
-	try {
-		const query = stringify(queryRaw, { encode: false });
-
-		return openF1Throttle.run(() => baseFetch<OpenF1RaceControl[]>(BASE, `/race_control?${query}`));
-	} catch {
-		return Promise.resolve([]);
-	}
-}
-
-export function fetchSessionResult(
-	queryRaw: QueryWrapper<OpenF1SessionResult>
-): Promise<OpenF1SessionResult[]> {
-	try {
-		const query = stringify(queryRaw, { encode: false });
-
-		return openF1Throttle.run(() =>
-			baseFetch<OpenF1SessionResult[]>(BASE, `/session_result?${query}`)
-		);
-	} catch {
-		return Promise.resolve([]);
-	}
-}
-
-export function fetchSessions(queryRaw: QueryWrapper<OpenF1Session>): Promise<OpenF1Session[]> {
-	try {
-		const query = stringify(queryRaw, { encode: false });
-
-		return openF1Throttle.run(() => baseFetch<OpenF1Session[]>(BASE, `/sessions?${query}`));
-	} catch {
-		return Promise.resolve([]);
-	}
-}
-
-export function fetchChampionshipDrivers(
+export async function fetchChampionshipDrivers(
 	queryRaw: QueryWrapper<OpenF1ChampionshipDriver>
 ): Promise<OpenF1ChampionshipDriver[]> {
 	try {
-		const query = stringify(queryRaw, { encode: false });
-
-		return openF1Throttle.run(() =>
-			baseFetch<OpenF1ChampionshipDriver[]>(BASE, `/championship_drivers?${query}`)
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1ChampionshipDriver[]>('championship_drivers', { query: queryRaw })
 		);
-	} catch {
-		return Promise.resolve([]);
+	} catch (error) {
+		throw handleError(error);
 	}
 }
 
-export function fetchChampionshipTeams(
+export async function fetchChampionshipTeams(
 	queryRaw: QueryWrapper<OpenF1ChampionshipTeam>
 ): Promise<OpenF1ChampionshipTeam[]> {
 	try {
-		const query = stringify(queryRaw, { encode: false });
-
-		return openF1Throttle.run(() =>
-			baseFetch<OpenF1ChampionshipTeam[]>(BASE, `/championship_teams?${query}`)
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1ChampionshipTeam[]>('championship_teams', { query: queryRaw })
 		);
-	} catch {
-		return Promise.resolve([]);
+	} catch (error) {
+		throw handleError(error);
 	}
+}
+
+export async function fetchDriver(queryRaw: QueryWrapper<OpenF1Driver>): Promise<OpenF1Driver[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Driver[]>('drivers', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchMeetings(
+	queryRaw: QueryWrapper<OpenF1Meeting>
+): Promise<OpenF1Meeting[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Meeting[]>('meetings', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchRaceControl(
+	queryRaw: QueryWrapper<OpenF1RaceControl>
+): Promise<OpenF1RaceControl[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1RaceControl[]>('race_control', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchSessionResult(
+	queryRaw: QueryWrapper<OpenF1SessionResult>
+): Promise<OpenF1SessionResult[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1SessionResult[]>('session_result', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchSessions(
+	queryRaw: QueryWrapper<OpenF1Session>
+): Promise<OpenF1Session[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Session[]>('sessions', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+function handleError(err: unknown): ApiError {
+	if (
+		err instanceof ApiError &&
+		typeof err.details === 'object' &&
+		err.details !== null &&
+		'detail' in err.details &&
+		String(err.details.detail).startsWith('Live F1 session in progress')
+	) {
+		return new ApiError(
+			'Live session is currently in progress. Please try again later',
+			'http',
+			401,
+			err.details
+		);
+	}
+
+	return toApiError(err);
 }

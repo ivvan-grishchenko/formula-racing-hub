@@ -1,14 +1,13 @@
 import type { OpenF1Session } from '@api/openf1/types';
-import type { DriverStandingRow } from '@hooks/use-standings-data';
 
 import { fetchSessions } from '@api/openf1/client';
 import { openf1Keys } from '@api/openf1/query-keys';
 import { YearSelector } from '@components/calendar/year-selector';
+import { ErrorDisplay } from '@components/layout/error-display';
 import { Loader } from '@components/layout/loader';
 import { DriverStandingLine } from '@components/standings/driver-standing-line';
 import { useStandingsData } from '@hooks/use-standings-data';
 import { THEME } from '@lib/theme';
-import { cn } from '@lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader } from '@ui/card';
 import { GLOW_OUTSET } from '@ui/glow';
@@ -42,9 +41,7 @@ export function StandingsScreen() {
 	});
 	const { data: sessions, refetch: refetchSessions } = sessionsQuery;
 
-	useEffect(() => {
-		setSession(sessions?.at(-1));
-	}, [sessions]);
+	useEffect(() => setSession(sessions?.at(-1)), [sessions]);
 
 	const [session, setSession] = useState<OpenF1Session | undefined>(sessions?.at(-1));
 
@@ -57,7 +54,9 @@ export function StandingsScreen() {
 		void refetchSessions();
 	}, [refetch, refetchSessions]);
 
-	if (isLoading || sessionsQuery.isPending) return <Loader />;
+	if (isLoading || sessionsQuery.isLoading) return <Loader />;
+
+	if (error) return <ErrorDisplay message={error.message} onRetry={refetch} />;
 
 	return (
 		<View className="flex-1">

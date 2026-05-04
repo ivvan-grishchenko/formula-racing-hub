@@ -1,11 +1,12 @@
 import { CalendarFilters } from '@components/calendar/calendar-filters';
+import { ErrorDisplay } from '@components/layout/error-display';
 import { Loader } from '@components/layout/loader';
 import { type CalendarFilter, useCalendarData } from '@hooks/use-calendar-data';
 import { THEME } from '@lib/theme';
 import { GLOW_OUTSET } from '@ui/glow';
 import { Icon } from '@ui/icon';
 import { Text } from '@ui/text';
-import { isBefore } from 'date-fns';
+import { isAfter, isBefore, isWithinInterval, parseISO } from 'date-fns';
 import { Search } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import { useCallback, useMemo, useState } from 'react';
@@ -20,6 +21,7 @@ export function CalendarScreen() {
 	const [year, setYear] = useState<number>(new Date().getFullYear());
 
 	const {
+		error,
 		isLoading,
 		isRefreshing,
 		meetingsChronological,
@@ -34,9 +36,7 @@ export function CalendarScreen() {
 	const [sprintOnly, setSprintOnly] = useState(false);
 	const [query, setQuery] = useState('');
 
-	const onRefresh = useCallback(() => {
-		void refetch();
-	}, [refetch]);
+	const onRefresh = useCallback(() => void refetch(), [refetch]);
 
 	const filteredMeetings = useMemo(() => {
 		const q = query.trim().toLowerCase();
@@ -72,6 +72,8 @@ export function CalendarScreen() {
 	const roundsCount = meetingsChronological.length;
 
 	if (isLoading) return <Loader />;
+
+	if (error) return <ErrorDisplay message={error.message} onRetry={refetch} />;
 
 	return (
 		<View className="flex-1">
@@ -126,15 +128,24 @@ export function CalendarScreen() {
 				) : (
 					<View className="gap-4">
 						{filteredMeetings.map((meeting) => {
+							const isNext =
+								timeFilter === 'upcoming' &&
+								meeting.meeting_key === nextMeetingKey &&
+								isAfter(meeting.date_end, Date.now());
+
+							const isGlowing = isWithinInterval(new Date(), {
+								end: parseISO(meeting.date_end),
+								start: parseISO(meeting.date_start),
+							});
+
 							return (
 								<RaceCalendarCard
-									glow={timeFilter === 'upcoming' && nextMeetingKey === meeting.meeting_key}
+									glow={isGlowing}
+									isNext={isNext}
+									isSprint={sprintMeetingKeys.has(meeting.meeting_key)}
 									key={meeting.meeting_key}
 									meeting={meeting}
-									nextMeetingKey={nextMeetingKey}
-									roundByMeetingKey={roundByMeetingKey}
-									sprintMeetingKeys={sprintMeetingKeys}
-									timeFilter={timeFilter}
+									round={roundByMeetingKey.get(meeting.meeting_key) ?? 0}
 									year={year}
 								/>
 							);

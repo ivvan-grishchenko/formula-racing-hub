@@ -1,7 +1,6 @@
 import type { OpenF1Meeting } from '@api/openf1/types';
 
 import { formatNextRaceDates } from '@components/home/next-race';
-import { CalendarFilter } from '@hooks/use-calendar-data';
 import { Badge } from '@ui/badge';
 import { Card, CardProps } from '@ui/card';
 import { Text } from '@ui/text';
@@ -11,28 +10,21 @@ import { useMemo } from 'react';
 import { View } from 'react-native';
 
 type RaceCalendarCardProps = CardProps & {
+	isNext: boolean;
+	isSprint: boolean;
 	meeting: OpenF1Meeting;
-	nextMeetingKey: null | number;
-	roundByMeetingKey: Map<number, number>;
-	sprintMeetingKeys: Set<number>;
-	timeFilter: CalendarFilter;
+	round: number;
 	year: number;
 };
 
 export function RaceCalendarCard({
+	isNext,
+	isSprint,
 	meeting,
-	nextMeetingKey,
-	roundByMeetingKey,
-	sprintMeetingKeys,
-	timeFilter,
+	round,
 	year,
 	...props
 }: RaceCalendarCardProps) {
-	const isNext =
-		timeFilter === 'upcoming' &&
-		meeting.meeting_key === nextMeetingKey &&
-		isAfter(meeting.date_end, Date.now());
-
 	const statusLabel = useMemo(() => {
 		if (isNext) return 'Upcoming';
 
@@ -59,13 +51,13 @@ export function RaceCalendarCard({
 								className="rounded-md border-border bg-secondary px-2.5 py-1.5"
 								variant="outline">
 								<Text className="font-jetbrains-bold text-[9px] uppercase text-card-foreground">
-									Round {roundByMeetingKey.get(meeting.meeting_key) ?? 0}
+									Round {round}
 								</Text>
 							</Badge>
 							<Badge className="rounded-full border-0 bg-secondary px-2.5 py-1.5">
 								<Text className="font-jetbrains-bold text-[10px] uppercase text-primary">Race</Text>
 							</Badge>
-							{sprintMeetingKeys.has(meeting.meeting_key) && (
+							{isSprint && (
 								<Badge className="rounded-full border-0 bg-secondary px-2.5 py-1.5">
 									<Text className="font-jetbrains-bold text-[10px] uppercase text-primary">
 										Sprint

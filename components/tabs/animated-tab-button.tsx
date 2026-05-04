@@ -1,4 +1,5 @@
 import { Button } from '@components/ui/button';
+import { GlowOverlayContainer } from '@ui/glow';
 import { Icon } from '@ui/icon';
 import { TabTriggerSlotProps } from 'expo-router/ui';
 import { LucideIcon } from 'lucide-react-native';
@@ -31,6 +32,20 @@ export function AnimatedTabButton({ icon, isFocused = false, ...props }: Animate
 			transform: [{ scale: scale.value }],
 		};
 	});
+
+	if (isFocused)
+		return (
+			<GlowOverlayContainer>
+				<AnimatedButton
+					{...props}
+					className="h-12 w-12"
+					size="icon"
+					style={animatedStyle}
+					variant="outline">
+					<Icon as={icon} color="text" size={28} />
+				</AnimatedButton>
+			</GlowOverlayContainer>
+		);
 
 	return (
 		<AnimatedButton
