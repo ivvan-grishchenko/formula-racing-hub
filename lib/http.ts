@@ -14,7 +14,7 @@ type RequestOptions = {
 	headers?: Record<string, string>;
 	query?: RequestQuery;
 };
-type RequestQuery = Record<string, boolean | null | number | string | undefined>;
+type RequestQuery = any;
 export class ApiError extends Error {
 	constructor(
 		message: string,

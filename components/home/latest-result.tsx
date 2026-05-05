@@ -1,11 +1,11 @@
 import type { OpenF1Session } from '@api/openf1/types';
 
 import { LatestRaceResultRow } from '@hooks/use-home-data';
+import { formatDurationTime, formatGapToLeaderTime } from '@lib/utils';
 import { Button } from '@ui/button';
 import { Card, CardContent, CardHeader } from '@ui/card';
 import { Icon } from '@ui/icon';
 import { Text } from '@ui/text';
-import { addSeconds, format, intervalToDuration } from 'date-fns';
 import { ChevronRight } from 'lucide-react-native';
 import { View } from 'react-native';
 
@@ -48,8 +48,13 @@ export default function LatestResult({ latestRace, latestRaceResult }: LatestRes
 							</View>
 							<Text>
 								{index === 0
-									? formatDuration(result.duration)
-									: `+${format(addSeconds(new Date(0), result.gap_to_leader), 'ss.SSS')}`}
+									? formatDurationTime(result.duration, latestRace.session_type)
+									: formatGapToLeaderTime(
+											latestRaceResult.at(0)?.duration || [],
+											result.duration,
+											result.gap_to_leader,
+											latestRace.session_type
+										)}
 							</Text>
 						</View>
 					))}
@@ -57,16 +62,4 @@ export default function LatestResult({ latestRace, latestRaceResult }: LatestRes
 			</Card>
 		</View>
 	);
-}
-
-function formatDuration(totalSeconds: number): string {
-	const ms = Math.round((totalSeconds % 1) * 1000);
-	const duration = intervalToDuration({ end: Math.floor(totalSeconds) * 1000, start: 0 });
-
-	// Helper to ensure two-digit padding
-	const pad = (n: number | undefined) => (n || 0).toString().padStart(2, '0');
-
-	// Format: H:mm:ss.SSS
-	// Use duration.hours directly (no padding) for the first unit
-	return `${duration.hours || 0}:${pad(duration.minutes)}:${pad(duration.seconds)}.${ms.toString().padStart(3, '0')}`;
 }

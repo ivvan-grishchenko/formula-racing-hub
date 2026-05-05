@@ -9,6 +9,7 @@ import type {
 	OpenF1RaceControl,
 	OpenF1Session,
 	OpenF1SessionResult,
+	OpenF1Weather,
 	QueryWrapper,
 } from './types';
 
@@ -102,20 +103,30 @@ export async function fetchSessions(
 	}
 }
 
+export async function fetchWeather(
+	queryRaw: QueryWrapper<OpenF1Weather>
+): Promise<OpenF1Weather[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Weather[]>('weather', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
 function handleError(err: unknown): ApiError {
 	if (
 		err instanceof ApiError &&
 		typeof err.details === 'object' &&
 		err.details !== null &&
-		'detail' in err.details &&
-		String(err.details.detail).startsWith('Live F1 session in progress')
+		'detail' in err.details
 	) {
-		return new ApiError(
-			'Live session is currently in progress. Please try again later',
-			'http',
-			401,
-			err.details
-		);
+		const errorMessage = String(err.details.detail).startsWith('Live F1 session in progress')
+			? 'Live session is currently in progress. Please try again later'
+			: String(err.details.detail);
+
+		return new ApiError(errorMessage, 'http', 401, err.details);
 	}
 
 	return toApiError(err);

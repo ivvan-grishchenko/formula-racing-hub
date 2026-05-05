@@ -7,19 +7,22 @@ import { GLOW_OUTSET } from '@ui/glow';
 import { Icon } from '@ui/icon';
 import { GradientText, Text } from '@ui/text';
 import { format, parseISO } from 'date-fns';
-import { Calendar1Icon, ClockIcon, LucideIcon, MenuIcon, TrophyIcon } from 'lucide-react-native';
-import { ScrollView, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Calendar1Icon, ClockIcon, MenuIcon, TrophyIcon } from 'lucide-react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 export type WeekendDetailScreenProps = { meeting: OpenF1Meeting; sessions: OpenF1Session[] };
 
-const grid: { icon: LucideIcon; title: string }[] = [
-	{ icon: MenuIcon, title: 'Starting grid' },
-	{ icon: TrophyIcon, title: 'Session Results' },
-	{ icon: TrophyIcon, title: 'Session Stats' },
-	{ icon: TrophyIcon, title: 'Race Control' },
-];
-
 export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenProps) {
+	const router = useRouter();
+
+	const handleSessionResults = () => {
+		router.push({
+			params: { meetingKey: meeting.meeting_key },
+			pathname: '/(info)/results/[meetingKey]',
+		});
+	};
+
 	return (
 		<ScrollView
 			className="flex-1"
@@ -36,16 +39,35 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 			/>
 
 			<View className="flex flex-row flex-wrap gap-3">
-				{grid.map(({ icon, title }, index) => (
-					<View
-						className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4"
-						key={`${title}-${index}`}>
-						<View className="rounded-xl bg-muted p-4">
-							<Icon as={icon} color="text" size={24} />
-						</View>
-						<Text className="font-jetbrains-bold">{title}</Text>
+				<View className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4">
+					<View className="rounded-xl bg-muted p-4">
+						<Icon as={MenuIcon} color="text" size={24} />
 					</View>
-				))}
+					<Text className="font-jetbrains-bold">Starting grid</Text>
+				</View>
+
+				<Pressable
+					className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4"
+					onPress={handleSessionResults}>
+					<View className="rounded-xl bg-muted p-4">
+						<Icon as={TrophyIcon} color="text" size={24} />
+					</View>
+					<Text className="font-jetbrains-bold">Session Results</Text>
+				</Pressable>
+
+				<View className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4">
+					<View className="rounded-xl bg-muted p-4">
+						<Icon as={TrophyIcon} color="text" size={24} />
+					</View>
+					<Text className="font-jetbrains-bold">Session Stats</Text>
+				</View>
+
+				<View className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4">
+					<View className="rounded-xl bg-muted p-4">
+						<Icon as={TrophyIcon} color="text" size={24} />
+					</View>
+					<Text className="font-jetbrains-bold">Race Control</Text>
+				</View>
 			</View>
 
 			<Text className="font-jetbrains-bold-italic text-[13px] uppercase text-card-foreground">
@@ -58,7 +80,6 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 				renderItem={(session) => (
 					<Card>
 						<CardHeader>
-							{/*<Text className="font-jetbrains-semi-bold">{session.session_name}</Text>*/}
 							<GradientText
 								className="min-h-6 border-b border-b-border"
 								fontFamily="JetBrainsMono-SemiBold.ttf"

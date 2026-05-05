@@ -88,12 +88,23 @@ export type OpenF1SessionResult = {
 	dns: boolean;
 	driver_number: number;
 	dsq: boolean;
-	duration: number;
-	gap_to_leader: number;
+	duration: number | number[];
+	gap_to_leader: number | number[] | string;
 	meeting_key: number;
 	number_of_laps: number;
 	position: number;
 	session_key: number;
+};
+
+export type OpenF1Weather = {
+	air_temperature: number;
+	humidity: number;
+	meeting_key: number;
+	pressure: number;
+	session_key: number;
+	track_temperature: number;
+	wind_direction: number;
+	wind_speed: number;
 };
 
 export type QueryWrapper<T> = Partial<

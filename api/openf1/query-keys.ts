@@ -7,6 +7,7 @@ import type {
 	OpenF1RaceControl,
 	OpenF1Session,
 	OpenF1SessionResult,
+	OpenF1Weather,
 	QueryWrapper,
 } from '@api/openf1/types';
 
@@ -22,4 +23,5 @@ export const openf1Keys = {
 	sessionResult: (query: QueryWrapper<OpenF1SessionResult>) =>
 		['sessionResult', ...Object.values(query)] as const,
 	sessions: (query: QueryWrapper<OpenF1Session>) => ['sessions', ...Object.values(query)] as const,
+	weather: (query: QueryWrapper<OpenF1Weather>) => ['weather', ...Object.values(query)] as const,
 };

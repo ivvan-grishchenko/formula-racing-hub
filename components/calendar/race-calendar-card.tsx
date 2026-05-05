@@ -6,6 +6,7 @@ import { Card, CardProps } from '@ui/card';
 import { Text } from '@ui/text';
 import { isAfter } from 'date-fns';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { View } from 'react-native';
 
@@ -25,6 +26,9 @@ export function RaceCalendarCard({
 	year,
 	...props
 }: RaceCalendarCardProps) {
+	const router = useRouter();
+	const meetingKey = String(meeting.meeting_key);
+
 	const statusLabel = useMemo(() => {
 		if (isNext) return 'Upcoming';
 
@@ -35,8 +39,11 @@ export function RaceCalendarCard({
 		return 'Completed';
 	}, [isNext, meeting.date_end, meeting.is_cancelled]);
 
+	const handleOnPress = () =>
+		router.push({ params: { meetingKey }, pathname: '/(info)/weekend/[meetingKey]' });
+
 	return (
-		<Card className="gap-3 px-4 py-3" {...props}>
+		<Card className="gap-3 px-4 py-3" onPress={handleOnPress} {...props}>
 			<View className="flex-row justify-between gap-3">
 				<View className="flex-1 gap-3">
 					<Text className="text-xs text-muted-foreground">{meeting.circuit_short_name}</Text>
