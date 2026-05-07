@@ -8,7 +8,7 @@ import { Icon } from '@ui/icon';
 import { GradientText, Text } from '@ui/text';
 import { format, parseISO } from 'date-fns';
 import { useRouter } from 'expo-router';
-import { Calendar1Icon, ClockIcon, MenuIcon, TrophyIcon } from 'lucide-react-native';
+import { Calendar1Icon, ClockIcon, FlagIcon, MenuIcon, TrophyIcon } from 'lucide-react-native';
 import { Pressable, ScrollView, View } from 'react-native';
 
 export type WeekendDetailScreenProps = { meeting: OpenF1Meeting; sessions: OpenF1Session[] };
@@ -20,6 +20,13 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 		router.push({
 			params: { meetingKey: meeting.meeting_key },
 			pathname: '/(info)/results/[meetingKey]',
+		});
+	};
+
+	const handleRaceControl = () => {
+		router.push({
+			params: { meetingKey: meeting.meeting_key },
+			pathname: '/(info)/race-control/[meetingKey]',
 		});
 	};
 
@@ -62,12 +69,14 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 					<Text className="font-jetbrains-bold">Session Stats</Text>
 				</View>
 
-				<View className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4">
+				<Pressable
+					className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4"
+					onPress={handleRaceControl}>
 					<View className="rounded-xl bg-muted p-4">
-						<Icon as={TrophyIcon} color="text" size={24} />
+						<Icon as={FlagIcon} color="text" size={24} />
 					</View>
 					<Text className="font-jetbrains-bold">Race Control</Text>
-				</View>
+				</Pressable>
 			</View>
 
 			<Text className="font-jetbrains-bold-italic text-[13px] uppercase text-card-foreground">

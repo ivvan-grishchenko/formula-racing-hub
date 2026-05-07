@@ -5,6 +5,7 @@ import { type CalendarFilter, useCalendarData } from '@hooks/use-calendar-data';
 import { THEME } from '@lib/theme';
 import { GLOW_OUTSET } from '@ui/glow';
 import { Icon } from '@ui/icon';
+import { UniversalSelect } from '@ui/select';
 import { Text } from '@ui/text';
 import { isAfter, isBefore, isWithinInterval, parseISO } from 'date-fns';
 import { Search } from 'lucide-react-native';
@@ -13,12 +14,19 @@ import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, TextInput, View } from 'react-native';
 
 import { RaceCalendarCard } from './race-calendar-card';
-import { YearSelector } from './year-selector';
 
 export function CalendarScreen() {
 	const { colorScheme } = useColorScheme();
 	const palette = THEME[colorScheme === 'dark' ? 'dark' : 'light'];
 	const [year, setYear] = useState<number>(new Date().getFullYear());
+	const years = useMemo(() => {
+		const currentYear = new Date().getFullYear();
+		const years: number[] = [];
+
+		for (let year = currentYear; year >= 2023; year--) years.push(year);
+
+		return years;
+	}, []);
 
 	const {
 		error,
@@ -91,8 +99,14 @@ export function CalendarScreen() {
 					/>
 				}
 				showsVerticalScrollIndicator={false}>
-				<View className="gap-2">
-					<YearSelector onSelectedYearChange={setYear} selectedYear={year} />
+				<View className="flex-1 gap-2">
+					<UniversalSelect
+						labelKeyExtractor={(option) => `${option} season`.toUpperCase()}
+						onValueChange={(value) => setYear(Number(value))}
+						options={years}
+						value={String(year)}
+						valueKeyExtractor={(option) => `${option}`}
+					/>
 					<Text className="font-jetbrains-regular text-[13px] text-muted-foreground">
 						{roundsCount} rounds • {sprintWeekendCount} sprints
 					</Text>

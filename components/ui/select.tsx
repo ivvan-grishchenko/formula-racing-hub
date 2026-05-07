@@ -3,12 +3,26 @@ import * as SelectPrimitive from '@rn-primitives/select';
 import { Icon } from '@ui/icon';
 import { TextClassContext } from '@ui/text';
 import { Check, ChevronDown, ChevronDownIcon, ChevronUpIcon } from 'lucide-react-native';
-import { Fragment } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { ComponentProps, Fragment, ReactNode, useRef, useState } from 'react';
+import { LayoutChangeEvent, Platform, StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { FadeIn, FadeOut } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FullWindowOverlay as RNFullWindowOverlay } from 'react-native-screens';
 
 import { NativeOnlyAnimatedView } from './native-only-animated-view';
+
+export type UniversalSelectProps<T> = {
+	className?: string;
+	disabled?: boolean;
+	labelKeyExtractor: (option: T) => string;
+	onValueChange?: (value: string) => void;
+	options: T[];
+	placeholder?: string;
+	size?: 'default' | 'sm';
+	value?: string;
+	valueKeyExtractor: (option: T) => string;
+};
 
 type Option = SelectPrimitive.Option;
 
@@ -22,8 +36,8 @@ function SelectTrigger({
 	ref,
 	size = 'default',
 	...props
-}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
-	children?: React.ReactNode;
+}: ComponentProps<typeof SelectPrimitive.Trigger> & {
+	children?: ReactNode;
 	size?: 'default' | 'sm';
 }) {
 	return (
@@ -49,7 +63,7 @@ function SelectValue({
 	className,
 	ref,
 	...props
-}: React.ComponentProps<typeof SelectPrimitive.Value> & {
+}: ComponentProps<typeof SelectPrimitive.Value> & {
 	className?: string;
 }) {
 	const { value } = SelectPrimitive.useRootContext();
@@ -57,7 +71,7 @@ function SelectValue({
 	return (
 		<SelectPrimitive.Value
 			className={cn(
-				'line-clamp-1 flex flex-row items-center gap-2 text-sm text-foreground',
+				'line-clamp-1 flex min-w-0 flex-1 flex-row items-center gap-2 text-sm text-foreground',
 				!value && 'text-muted-foreground',
 				className
 			)}
@@ -75,7 +89,7 @@ function SelectContent({
 	portalHost,
 	position = 'popper',
 	...props
-}: React.ComponentProps<typeof SelectPrimitive.Content> & {
+}: ComponentProps<typeof SelectPrimitive.Content> & {
 	className?: string;
 	portalHost?: string;
 }) {
@@ -135,7 +149,7 @@ function SelectItem({
 	children,
 	className,
 	...props
-}: React.ComponentProps<typeof SelectPrimitive.Item>) {
+}: ComponentProps<typeof SelectPrimitive.Item>) {
 	return (
 		<SelectPrimitive.Item
 			className={cn(
@@ -157,7 +171,7 @@ function SelectItem({
 	);
 }
 
-function SelectLabel({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) {
+function SelectLabel({ className, ...props }: ComponentProps<typeof SelectPrimitive.Label>) {
 	return (
 		<SelectPrimitive.Label
 			className={cn('px-2 py-2 text-xs text-muted-foreground sm:py-1.5', className)}
@@ -173,10 +187,8 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select
 function SelectScrollDownButton({
 	className,
 	...props
-}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {
-	if (Platform.OS !== 'web') {
-		return null;
-	}
+}: ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {
+	if (Platform.OS !== 'web') return null;
 
 	return (
 		<SelectPrimitive.ScrollDownButton
@@ -194,10 +206,8 @@ function SelectScrollDownButton({
 function SelectScrollUpButton({
 	className,
 	...props
-}: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {
-	if (Platform.OS !== 'web') {
-		return null;
-	}
+}: ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {
+	if (Platform.OS !== 'web') return null;
 
 	return (
 		<SelectPrimitive.ScrollUpButton
@@ -211,7 +221,7 @@ function SelectScrollUpButton({
 function SelectSeparator({
 	className,
 	...props
-}: React.ComponentProps<typeof SelectPrimitive.Separator>) {
+}: ComponentProps<typeof SelectPrimitive.Separator>) {
 	return (
 		<SelectPrimitive.Separator
 			className={cn(
@@ -221,6 +231,79 @@ function SelectSeparator({
 			)}
 			{...props}
 		/>
+	);
+}
+
+function UniversalSelect<T>({
+	className,
+	disabled,
+	labelKeyExtractor,
+	onValueChange,
+	options,
+	placeholder = 'Select an option',
+	size = 'default',
+	value,
+	valueKeyExtractor,
+}: UniversalSelectProps<T>) {
+	const ref = useRef<SelectPrimitive.TriggerRef>(null);
+	const scrollRef = useRef<ScrollView>(null);
+	const [width, setWidth] = useState(0);
+	const insets = useSafeAreaInsets();
+
+	const contentInsets = {
+		bottom: Platform.select({ android: insets.bottom + 24, ios: insets.bottom }),
+		left: 12,
+		right: 12,
+		top: insets.top,
+	};
+	const selectedOption = value
+		? options.find((opt) => valueKeyExtractor(opt) === value)
+		: undefined;
+	const selectValue: Option = selectedOption
+		? { label: labelKeyExtractor(selectedOption), value: valueKeyExtractor(selectedOption) }
+		: undefined;
+
+	const handleValueChange = (option: Option) => {
+		if (option && onValueChange) onValueChange(option.value);
+	};
+	const onLayout = (event: LayoutChangeEvent) => {
+		const { width } = event.nativeEvent.layout;
+
+		setWidth(width);
+	};
+
+	return (
+		<View className={className}>
+			<Select
+				disabled={disabled}
+				onLayout={onLayout}
+				onValueChange={handleValueChange}
+				value={selectValue}>
+				<SelectTrigger disabled={disabled} ref={ref} size={size}>
+					<SelectValue className="font-jetbrains-thin-italic" placeholder={placeholder} />
+				</SelectTrigger>
+				<SelectContent insets={contentInsets}>
+					<ScrollView className="max-h-52" ref={scrollRef} style={{ width }}>
+						<SelectGroup>
+							{options.map((option) => (
+								<SelectItem
+									key={valueKeyExtractor(option)}
+									label={labelKeyExtractor(option)}
+									onLayout={(e) => {
+										const y = e.nativeEvent.layout.y;
+
+										if (valueKeyExtractor(option) === value)
+											scrollRef.current?.scrollTo({ animated: true, y });
+									}}
+									value={valueKeyExtractor(option)}>
+									{labelKeyExtractor(option)}
+								</SelectItem>
+							))}
+						</SelectGroup>
+					</ScrollView>
+				</SelectContent>
+			</Select>
+		</View>
 	);
 }
 
@@ -236,4 +319,5 @@ export {
 	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
+	UniversalSelect,
 };
