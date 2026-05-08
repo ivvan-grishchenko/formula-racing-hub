@@ -1,7 +1,7 @@
 import type { OpenF1Meeting, OpenF1Session } from '@api/openf1/types';
 
 import { RaceCalendarCard } from '@components/calendar/race-calendar-card';
-import { Timeline } from '@components/layout/Timeline';
+import { Timeline } from '@components/layout/timeline';
 import { Card, CardContent, CardHeader } from '@ui/card';
 import { GLOW_OUTSET } from '@ui/glow';
 import { Icon } from '@ui/icon';
