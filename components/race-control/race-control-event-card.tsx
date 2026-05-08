@@ -12,7 +12,6 @@ export type RaceControlEventCardProps = {
 };
 
 export function RaceControlEventCard({ driver, event }: RaceControlEventCardProps) {
-	const formattedTime = formatTime(event.date);
 	const lapText = event.lap_number ? `Lap ${event.lap_number}` : null;
 
 	return (
@@ -26,9 +25,6 @@ export function RaceControlEventCard({ driver, event }: RaceControlEventCardProp
 				<Text className="font-jetbrains text-sm text-muted-foreground" numberOfLines={2}>
 					{event.message}
 				</Text>
-				<View className="flex-row items-center gap-2">
-					<Text className="font-jetbrains text-muted-foreground/70 text-xs">{formattedTime}</Text>
-				</View>
 			</CardContent>
 			{driver && (
 				<CardFooter className="flex-row gap-2">
@@ -41,14 +37,4 @@ export function RaceControlEventCard({ driver, event }: RaceControlEventCardProp
 			)}
 		</Card>
 	);
-}
-
-function formatTime(dateStr: string): string {
-	const date = new Date(dateStr);
-
-	return date.toLocaleTimeString('en-GB', {
-		hour: '2-digit',
-		minute: '2-digit',
-		second: '2-digit',
-	});
 }

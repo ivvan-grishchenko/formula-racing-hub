@@ -1,7 +1,7 @@
 import type { OpenF1Meeting, OpenF1Session } from '@api/openf1/types';
 
 import { RaceCalendarCard } from '@components/calendar/race-calendar-card';
-import { Timeline } from '@components/layout/timeline';
+import { Timeline } from '@components/layout/Timeline';
 import { Card, CardContent, CardHeader } from '@ui/card';
 import { GLOW_OUTSET } from '@ui/glow';
 import { Icon } from '@ui/icon';
@@ -27,6 +27,13 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 		router.push({
 			params: { meetingKey: meeting.meeting_key },
 			pathname: '/(info)/race-control/[meetingKey]',
+		});
+	};
+
+	const handleSessionStats = () => {
+		router.push({
+			params: { meetingKey: meeting.meeting_key },
+			pathname: '/(info)/session-stats/[meetingKey]',
 		});
 	};
 
@@ -62,12 +69,14 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 					<Text className="font-jetbrains-bold">Session Results</Text>
 				</Pressable>
 
-				<View className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4">
+				<Pressable
+					className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4"
+					onPress={handleSessionStats}>
 					<View className="rounded-xl bg-muted p-4">
 						<Icon as={TrophyIcon} color="text" size={24} />
 					</View>
 					<Text className="font-jetbrains-bold">Session Stats</Text>
-				</View>
+				</Pressable>
 
 				<Pressable
 					className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4"
