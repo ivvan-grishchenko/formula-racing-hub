@@ -23,6 +23,13 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 		});
 	};
 
+	const handleStartingGrid = () => {
+		router.push({
+			params: { meetingKey: meeting.meeting_key },
+			pathname: '/(info)/starting-grid/[meetingKey]',
+		});
+	};
+
 	const handleRaceControl = () => {
 		router.push({
 			params: { meetingKey: meeting.meeting_key },
@@ -53,12 +60,14 @@ export function WeekendDetailScreen({ meeting, sessions }: WeekendDetailScreenPr
 			/>
 
 			<View className="flex flex-row flex-wrap gap-3">
-				<View className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4">
+				<Pressable
+					className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4"
+					onPress={handleStartingGrid}>
 					<View className="rounded-xl bg-muted p-4">
 						<Icon as={MenuIcon} color="text" size={24} />
 					</View>
 					<Text className="font-jetbrains-bold">Starting grid</Text>
-				</View>
+				</Pressable>
 
 				<Pressable
 					className="min-h-[88px] w-[48%] items-center justify-center gap-2 rounded-xl border bg-card p-4"

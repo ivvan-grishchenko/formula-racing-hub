@@ -96,6 +96,14 @@ export type OpenF1SessionResult = {
 	session_key: number;
 };
 
+export type OpenF1StartingGrid = {
+	driver_number: number;
+	lap_duration: number;
+	meeting_key: number;
+	position: number;
+	session_key: number;
+};
+
 export type OpenF1Weather = {
 	air_temperature: number;
 	humidity: number;

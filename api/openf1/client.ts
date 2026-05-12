@@ -9,6 +9,7 @@ import type {
 	OpenF1RaceControl,
 	OpenF1Session,
 	OpenF1SessionResult,
+	OpenF1StartingGrid,
 	OpenF1Weather,
 	QueryWrapper,
 } from './types';
@@ -85,6 +86,18 @@ export async function fetchSessionResult(
 	try {
 		return await openF1Throttle.run(() =>
 			openF1ApiClient.get<OpenF1SessionResult[]>('session_result', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchStartingGrid(
+	queryRaw: QueryWrapper<OpenF1StartingGrid>
+): Promise<OpenF1StartingGrid[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1StartingGrid[]>('starting_grid', { query: queryRaw })
 		);
 	} catch (error) {
 		throw handleError(error);
