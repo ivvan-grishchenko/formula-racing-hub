@@ -2,7 +2,8 @@ import type { OpenF1Driver, OpenF1RaceControl } from '@api/openf1/types';
 
 import { Card, CardContent, CardFooter, CardHeader } from '@ui/card';
 import { Text } from '@ui/text';
-import { View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, View } from 'react-native';
 
 import { FlagIndicator } from './flag-indicator';
 
@@ -12,7 +13,16 @@ export type RaceControlEventCardProps = {
 };
 
 export function RaceControlEventCard({ driver, event }: RaceControlEventCardProps) {
+	const router = useRouter();
 	const lapText = event.lap_number ? `Lap ${event.lap_number}` : null;
+
+	const handleDriverPress = () => {
+		if (!driver) return;
+		router.push({
+			params: { driverNumber: String(driver.driver_number) },
+			pathname: '/driver/[driverNumber]',
+		});
+	};
 
 	return (
 		<Card>
@@ -32,7 +42,9 @@ export function RaceControlEventCard({ driver, event }: RaceControlEventCardProp
 						className="h-6 w-1 rounded"
 						style={driver.team_colour ? { backgroundColor: `#${driver.team_colour}` } : undefined}
 					/>
-					<Text className="font-jetbrains-medium-italic">{driver.full_name}</Text>
+					<Pressable hitSlop={8} onPress={handleDriverPress}>
+						<Text className="font-jetbrains-medium-italic">{driver.full_name}</Text>
+					</Pressable>
 				</CardFooter>
 			)}
 		</Card>

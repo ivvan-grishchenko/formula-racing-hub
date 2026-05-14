@@ -49,7 +49,7 @@ export function HomeScreen() {
 						<LatestResult latestRace={latestRace} latestRaceResult={latestRaceResult} />
 					)}
 
-					<DriverFocus driverOfTheDay={driverOfTheDay} />
+					<DriverFocus driverOfTheDay={driverOfTheDay} sessionKey={latestRace?.session_key} />
 				</ScrollView>
 			</View>
 		</View>

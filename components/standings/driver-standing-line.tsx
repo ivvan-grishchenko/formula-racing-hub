@@ -3,15 +3,27 @@ import type { DriverStandingRow } from '@hooks/use-standings-data';
 import { OpenF1ChampionshipDriver } from '@api/openf1/types';
 import { cn } from '@lib/utils';
 import { Text } from '@ui/text';
-import { View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, View } from 'react-native';
 
 import { formatPoints } from './constructor-standing-line';
 
 export function DriverStandingLine({ row }: { row: DriverStandingRow }) {
+	const router = useRouter();
 	const colour = row.driver?.team_colour;
 
+	const handlePress = () => {
+		router.push({
+			params: { driverNumber: String(row.driver_number) },
+			pathname: '/driver/[driverNumber]',
+		});
+	};
+
 	return (
-		<View className="flex-row items-center justify-between gap-3 border-b border-border py-3 last:border-b-0">
+		<Pressable
+			className="flex-row items-center justify-between gap-3 border-b border-border py-3 last:border-b-0"
+			hitSlop={8}
+			onPress={handlePress}>
 			<View className="min-w-[28px] flex-row items-center gap-2">
 				<Text className="font-jetbrains-semi-bold text-sm">{row.position_current}</Text>
 			</View>
@@ -40,7 +52,7 @@ export function DriverStandingLine({ row }: { row: DriverStandingRow }) {
 					position_start={row.position_start}
 				/>
 			</View>
-		</View>
+		</Pressable>
 	);
 }
 

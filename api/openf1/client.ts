@@ -5,11 +5,17 @@ import type {
 	OpenF1ChampionshipDriver,
 	OpenF1ChampionshipTeam,
 	OpenF1Driver,
+	OpenF1Lap,
 	OpenF1Meeting,
+	OpenF1Overtake,
+	OpenF1Pit,
+	OpenF1Position,
 	OpenF1RaceControl,
 	OpenF1Session,
 	OpenF1SessionResult,
 	OpenF1StartingGrid,
+	OpenF1Stint,
+	OpenF1TeamRadio,
 	OpenF1Weather,
 	QueryWrapper,
 } from './types';
@@ -56,12 +62,56 @@ export async function fetchDriver(queryRaw: QueryWrapper<OpenF1Driver>): Promise
 	}
 }
 
+export async function fetchLaps(queryRaw: QueryWrapper<OpenF1Lap>): Promise<OpenF1Lap[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Lap[]>('laps', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
 export async function fetchMeetings(
 	queryRaw: QueryWrapper<OpenF1Meeting>
 ): Promise<OpenF1Meeting[]> {
 	try {
 		return await openF1Throttle.run(() =>
 			openF1ApiClient.get<OpenF1Meeting[]>('meetings', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchOvertakes(
+	queryRaw: QueryWrapper<OpenF1Overtake>
+): Promise<OpenF1Overtake[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Overtake[]>('overtakes', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchPit(queryRaw: QueryWrapper<OpenF1Pit>): Promise<OpenF1Pit[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Pit[]>('pit', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchPosition(
+	queryRaw: QueryWrapper<OpenF1Position>
+): Promise<OpenF1Position[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Position[]>('position', { query: queryRaw })
 		);
 	} catch (error) {
 		throw handleError(error);
@@ -92,6 +142,18 @@ export async function fetchSessionResult(
 	}
 }
 
+export async function fetchSessions(
+	queryRaw: QueryWrapper<OpenF1Session>
+): Promise<OpenF1Session[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1Session[]>('sessions', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
 export async function fetchStartingGrid(
 	queryRaw: QueryWrapper<OpenF1StartingGrid>
 ): Promise<OpenF1StartingGrid[]> {
@@ -104,12 +166,22 @@ export async function fetchStartingGrid(
 	}
 }
 
-export async function fetchSessions(
-	queryRaw: QueryWrapper<OpenF1Session>
-): Promise<OpenF1Session[]> {
+export async function fetchStints(queryRaw: QueryWrapper<OpenF1Stint>): Promise<OpenF1Stint[]> {
 	try {
 		return await openF1Throttle.run(() =>
-			openF1ApiClient.get<OpenF1Session[]>('sessions', { query: queryRaw })
+			openF1ApiClient.get<OpenF1Stint[]>('stints', { query: queryRaw })
+		);
+	} catch (error) {
+		throw handleError(error);
+	}
+}
+
+export async function fetchTeamRadio(
+	queryRaw: QueryWrapper<OpenF1TeamRadio>
+): Promise<OpenF1TeamRadio[]> {
+	try {
+		return await openF1Throttle.run(() =>
+			openF1ApiClient.get<OpenF1TeamRadio[]>('team_radio', { query: queryRaw })
 		);
 	} catch (error) {
 		throw handleError(error);

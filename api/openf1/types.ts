@@ -115,6 +115,70 @@ export type OpenF1Weather = {
 	wind_speed: number;
 };
 
+export type OpenF1Position = {
+	date: string;
+	driver_number: number;
+	meeting_key: number;
+	position: number;
+	session_key: number;
+};
+
+export type OpenF1Overtake = {
+	date: string;
+	driver_number: number;
+	meeting_key: number;
+	overtaken_driver_number: number;
+	overtaking_driver_number: number;
+	position: number;
+	session_key: number;
+};
+
+export type OpenF1Stint = {
+	compound: string;
+	driver_number: number;
+	lap_end: number;
+	lap_start: number;
+	meeting_key: number;
+	session_key: number;
+	stint_number: number;
+	tyre_age_at_start: number;
+};
+
+export type OpenF1Pit = {
+	date: string;
+	driver_number: number;
+	lap_number: number;
+	lane_duration: number;
+	meeting_key: number;
+	pit_duration: number;
+	session_key: number;
+	stop_duration: number;
+};
+
+export type OpenF1TeamRadio = {
+	date: string;
+	driver_number: number;
+	meeting_key: number;
+	recording_url: string;
+	session_key: number;
+};
+
+export type OpenF1Lap = {
+	date_start: string;
+	driver_number: number;
+	duration_sector_1: number;
+	duration_sector_2: number;
+	duration_sector_3: number;
+	i1_speed: number;
+	i2_speed: number;
+	is_pit_out_lap: boolean;
+	lap_duration: number | number[];
+	lap_number: number;
+	meeting_key: number;
+	session_key: number;
+	st_speed: number;
+};
+
 export type QueryWrapper<T> = Partial<
 	T & {
 		[K in keyof T as `${K & string}<`]: T[K];

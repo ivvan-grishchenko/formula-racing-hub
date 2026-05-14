@@ -49,7 +49,6 @@ export function StandingsScreen() {
 	const meetingsQuery = useQuery({
 		queryFn: () => fetchMeetings(meetingsQueryObj),
 		queryKey: openf1Keys.meetings(meetingsQueryObj),
-		staleTime: 0,
 	});
 	const { data: meetings, refetch: refetchMeetings } = meetingsQuery;
 

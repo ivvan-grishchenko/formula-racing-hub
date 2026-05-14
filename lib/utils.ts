@@ -66,3 +66,15 @@ function findLastNonNull(arr: number[]): null | number {
 
 	return null;
 }
+
+export const TYRE_COLOURS: Record<string, string> = {
+	SOFT: '#DC0000',
+	MEDIUM: '#FFD900',
+	HARD: '#FFFFFF',
+	INTERMEDIATE: '#43B02A',
+	WET: '#1E90FF',
+};
+
+export function getTyreColour(compound: string): string {
+	return TYRE_COLOURS[compound.toUpperCase()] ?? '#888888';
+}

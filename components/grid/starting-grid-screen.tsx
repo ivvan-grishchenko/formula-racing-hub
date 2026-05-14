@@ -1,4 +1,4 @@
-import type { OpenF1Driver, OpenF1Session, OpenF1StartingGrid } from '@api/openf1/types';
+import type { OpenF1Driver, OpenF1Session } from '@api/openf1/types';
 
 import { fetchDriver, fetchSessions, fetchStartingGrid } from '@api/openf1/client';
 import { openf1Keys } from '@api/openf1/query-keys';
@@ -8,6 +8,7 @@ import { cn } from '@lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { GLOW_OUTSET } from '@ui/glow';
 import { Text } from '@ui/text';
+import { useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 
@@ -16,6 +17,7 @@ export type StartingGridScreenProps = {
 };
 
 export function StartingGridScreen({ meetingKey }: StartingGridScreenProps) {
+	const router = useRouter();
 	const [selectedSession, setSelectedSession] = useState<null | OpenF1Session>(null);
 
 	const sessionsQueryObj = useMemo(() => ({ meeting_key: meetingKey }), [meetingKey]);
@@ -138,13 +140,25 @@ export function StartingGridScreen({ meetingKey }: StartingGridScreenProps) {
 						const colour = driver?.team_colour;
 						const isPole = gridEntry.position === 1;
 
+						const handleDriverPress = () => {
+							router.push({
+								params: {
+									driverNumber: String(gridEntry.driver_number),
+									meetingKey: String(meetingKey),
+								},
+								pathname: '/driver/[driverNumber]',
+							});
+						};
+
 						return (
-							<View
+							<Pressable
 								className={cn(
 									'flex-row items-center gap-3 border-b border-border py-3',
 									isPole && 'pl-0'
 								)}
-								key={gridEntry.driver_number}>
+								hitSlop={8}
+								key={gridEntry.driver_number}
+								onPress={handleDriverPress}>
 								{isPole && <View className="h-14 w-1 rounded-sm bg-red-600" />}
 
 								<View className="min-w-[28px]">
@@ -187,7 +201,7 @@ export function StartingGridScreen({ meetingKey }: StartingGridScreenProps) {
 										<Text className="font-jetbrains-bold text-xs text-foreground">POLE</Text>
 									</View>
 								)}
-							</View>
+							</Pressable>
 						);
 					})}
 				</View>

@@ -36,7 +36,7 @@ function Card({ className, glow = false, onLayout, onPress, ...props }: CardProp
 				{glow && frame.w > 0 && frame.h > 0 && <GlowOverlay height={frame.h} width={frame.w} />}
 				<CardWrapper
 					className={cn(
-						'border-border/70 relative z-[1] flex flex-col gap-6 rounded-xl border bg-card py-6 shadow-sm shadow-black/5',
+						'border-border/70 relative z-[1] flex flex-col gap-6 rounded-xl border bg-card py-6 shadow-sm shadow-black',
 						className
 					)}
 					onLayout={glow ? handleLayout : undefined}

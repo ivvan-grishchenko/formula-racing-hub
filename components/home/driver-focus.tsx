@@ -2,19 +2,38 @@ import type { OpenF1Driver } from '@api/openf1/types';
 
 import { Text } from '@ui/text';
 import { Image } from 'expo-image';
-import { View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, View } from 'react-native';
 
 type DriverFocusProps = {
 	driverOfTheDay?: null | OpenF1Driver;
+	sessionKey?: number;
 };
 
-export default function DriverFocus({ driverOfTheDay }: DriverFocusProps) {
+export default function DriverFocus({ driverOfTheDay, sessionKey }: DriverFocusProps) {
+	const router = useRouter();
+
+	const handlePress = () => {
+		if (!driverOfTheDay) return;
+
+		router.push({
+			params: {
+				driverNumber: String(driverOfTheDay.driver_number),
+				sessionKey: sessionKey ? String(sessionKey) : undefined,
+			},
+			pathname: '/(info)/driver/[driverNumber]',
+		});
+	};
+
 	return (
 		<View className="gap-2">
 			<Text className="font-jetbrains-italic" variant="large">
 				DRIVER FOCUS
 			</Text>
-			<View className="h-[168px] flex-row rounded-xl border border-border bg-card shadow-sm shadow-black/5">
+			<Pressable
+				className="h-[168px] flex-row rounded-xl border border-border bg-card shadow-sm shadow-black/5"
+				hitSlop={8}
+				onPress={handlePress}>
 				{!driverOfTheDay ? (
 					<View className="h-full w-1/2 flex-col items-center justify-center gap-2 pl-6">
 						<Text className="font-jetbrains-extra-bold-italic">Data is not yet available</Text>
@@ -39,7 +58,7 @@ export default function DriverFocus({ driverOfTheDay }: DriverFocusProps) {
 						/>
 					</View>
 				)}
-			</View>
+			</Pressable>
 		</View>
 	);
 }

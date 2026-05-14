@@ -15,6 +15,7 @@ export default defineConfig([
 	{
 		rules: {
 			'class-methods-use-this': 'off',
+			'import/no-unresolved': 'off',
 			'key-spacing': ['error', { afterColon: true }],
 			'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
 			'no-console': 'warn',

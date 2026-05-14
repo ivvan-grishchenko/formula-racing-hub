@@ -27,16 +27,19 @@ export const GLOW_CORNER_RADIUS = 12;
 const STROKE_WIDTH = 2.75;
 const TRAVEL_PERIOD_MS = 9_000;
 
-type GlowOverlayContainerProps = ViewProps & {
-	glow?: boolean;
-};
+type GlowOverlayContainerProps = Pick<GlowStrokeOverlayProps, 'colors' | 'positions'> &
+	ViewProps & {
+		glow?: boolean;
+	};
 type GlowStrokeOverlayProps = {
+	colors?: string[];
 	height: number;
+	positions?: number[];
 	width: number;
 };
 
-const positions = [0, 0.2, 0.4, 0.6, 0.8, 1];
-const colors = [
+const defaultPosition = [0, 0.2, 0.4, 0.6, 0.8, 1];
+const defaultColors = [
 	THEME.dark.chart1,
 	THEME.dark.chart2,
 	THEME.dark.chart3,
@@ -45,7 +48,12 @@ const colors = [
 	THEME.dark.chart1,
 ];
 
-export function GlowOverlay({ height, width }: GlowStrokeOverlayProps) {
+export function GlowOverlay({
+	colors = defaultColors,
+	height,
+	positions = defaultPosition,
+	width,
+}: GlowStrokeOverlayProps) {
 	const progress = useSharedValue(0);
 
 	const perimeter = 2 * (width + height);
@@ -98,8 +106,10 @@ export function GlowOverlay({ height, width }: GlowStrokeOverlayProps) {
 
 export function GlowOverlayContainer({
 	className,
+	colors,
 	glow = true,
 	onLayout,
+	positions,
 	...props
 }: GlowOverlayContainerProps) {
 	const [frame, setFrame] = useState({ h: 0, w: 0 });
@@ -116,7 +126,9 @@ export function GlowOverlayContainer({
 
 	return (
 		<View className="relative overflow-visible">
-			{glow && frame.w > 0 && frame.h > 0 && <GlowOverlay height={frame.h} width={frame.w} />}
+			{glow && frame.w > 0 && frame.h > 0 && (
+				<GlowOverlay colors={colors} height={frame.h} positions={positions} width={frame.w} />
+			)}
 			<View className={cn('relative z-[1]', className)} onLayout={handleLayout} {...props} />
 		</View>
 	);
